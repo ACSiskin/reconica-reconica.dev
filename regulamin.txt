@@ -1,0 +1,244 @@
+**REGULAMIN KORZYSTANIA Z SERWISU RECONICA.DEV**
+
+---
+
+### **1. Postanowienia ogólne**
+
+**1.1.** Niniejszy regulamin określa zasady korzystania z serwisu internetowego reconica.dev (dalej: „Serwis”).
+**1.2.** Administratorem Serwisu oraz danych osobowych jest Antoni Czyż (lub: \[nazwa firmy lub pseudonim, do uzupełnienia]), kontakt: \[np. [www.linkedin.com/in/tony-czyz-575371ba](http://www.linkedin.com/in/tony-czyz-575371ba)].
+**1.3.** Serwis działa w oparciu o lokalną infrastrukturę IT, bez przekazywania danych do zewnętrznych centrów przetwarzania.
+**1.4.** Korzystanie z Serwisu oznacza akceptację niniejszego regulaminu.
+
+---
+
+### **2. Charakterystyka Serwisu i systemu Reconica**
+
+**2.1.** Reconica to system wywiadowczy nowej generacji, wspierany przez sztuczną inteligencję.
+**2.2.** W ramach Serwisu użytkownik wchodzi w interakcję z cyfrowymi agentkami:
+
+* **a)** Sintra – specjalizująca się w analizie OSINT,
+* **b)** Kaira – oparta na modelu Mistral, wspomagająca procesy decyzyjne i raportowanie.
+  **2.3.** Reconica jest częścią ekosystemu **S.A.R.A.** (System for Autonomous Reasoning and Analysis), którego celem jest wspomaganie autonomicznego rozumowania i analizy danych.
+  **2.4.** System korzysta z następujących technologii i komponentów:
+* **a)** lokalnych modeli AI (Gemma 3 oraz Mistral – wykorzystywany przez agentkę Kairę),
+* **b)** interfejsu Open WebUI,
+* **c)** zintegrowanych narzędzi OSINT (Shodan, LeakCheck, Rejestr.io),
+* **d)** kontenerów Docker zapewniających izolację środowisk,
+* **e)** połączenia Cloudflare Tunnel do komunikacji użytkownik–host.
+
+---
+
+### **3. Warunki techniczne i bezpieczeństwo**
+
+**3.1.** Serwis dostępny jest przez połączenie HTTPS zabezpieczone tunelem Cloudflare.
+**3.2.** Wszystkie dane przetwarzane są lokalnie, bez udziału zewnętrznych centrów danych lub usług chmurowych.
+**3.3.** Serwis:
+
+* **a)** nie wymaga zakładania kont użytkowników, chyba że wyraźnie to zaznaczono,
+* **b)** może w przyszłości oferować opcjonalną rejestrację dla partnerów lub użytkowników testowych.
+  **3.4.** W przypadku przesyłania plików lub zapytań do analizy, użytkownik oświadcza, że:
+* **a)** posiada prawa do ich wykorzystania,
+* **b)** nie narusza praw osób trzecich ani obowiązującego prawa,
+* **c)** nie wprowadza treści nielegalnych lub niebezpiecznych.
+
+---
+
+### **4. Prywatność i przetwarzanie danych**
+
+**4.1.** Zakres danych zbieranych przez Serwis obejmuje:
+
+* **a)** dane techniczne (adres IP, nagłówki HTTP, znacznik czasu),
+* **b)** dane sesji (logi systemowe, zdarzenia, komunikaty błędów),
+* **c)** treść interakcji (czaty z agentkami AI, zapytania API, przesłane pliki, wygenerowane raporty),
+* **d)** dane logowania (jeśli opcja logowania zostanie udostępniona).
+  **4.2.** Dane są:
+* **a)** przechowywane wyłącznie lokalnie na serwerze administratora,
+* **b)** szyfrowane zgodnie z aktualnymi standardami bezpieczeństwa IT,
+* **c)** niedostępne dla podmiotów trzecich,
+* **d)** niewysyłane do zewnętrznych chmur, API ani modeli online.
+  **4.3.** Administrator zobowiązuje się do:
+* **a)** nieprofilowania danych użytkowników,
+* **b)** niewykorzystywania danych do celów marketingowych,
+* **c)** ograniczenia dostępu wyłącznie do upoważnionych jednostek administrujących systemem.
+  **4.4.** Zgodnie z RODO, użytkownik ma prawo do:
+* **a)** uzyskania informacji, jakie dane na jego temat są przechowywane,
+* **b)** dostępu do swoich danych,
+* **c)** sprostowania danych nieprawidłowych lub nieaktualnych,
+* **d)** żądania usunięcia danych (chyba że przechowywanie jest wymagane prawnie),
+* **e)** ograniczenia przetwarzania,
+* **f)** wniesienia skargi do organu nadzorczego (PUODO).
+  **4.5.** Wnioski związane z realizacją praw RODO należy kierować bezpośrednio do administratora, korzystając z danych kontaktowych wskazanych w pkt. 1.2.
+
+---
+
+### **5. Odpowiedzialność i ograniczenia**
+
+**5.1.** Administrator Serwisu:
+
+* **a)** udostępnia narzędzia do analizy danych OSINT oraz komunikacji z AI,
+* **b)** nie ponosi odpowiedzialności za sposób wykorzystania wyników przez użytkownika,
+* **c)** nie gwarantuje pełnej poprawności ani kompletności generowanych odpowiedzi.
+  **5.2.** Użytkownik zobowiązany jest do:
+* **a)** korzystania z Serwisu zgodnie z przepisami prawa i dobrymi obyczajami,
+* **b)** nieprzesyłania danych nielegalnych lub zawierających treści zakazane.
+  **5.3.** Treści generowane przez Sintrę i Kairę:
+* **a)** mają charakter wspomagający,
+* **b)** nie mogą być traktowane jako oficjalne ekspertyzy, porady prawne ani operacyjne,
+* **c)** powinny być zawsze weryfikowane przez użytkownika.
+
+---
+
+### **6. Wykorzystane technologie i licencje**
+
+**6.1.** Serwis wykorzystuje oprogramowanie open source, w tym:
+
+* **a)** Open WebUI – interfejs użytkownika AI,
+* **b)** Gemma 3 – lokalny model językowy AI,
+* **c)** Mistral – lokalny model językowy AI wykorzystywany przez Kairę,
+* **d)** n8n – silnik automatyzacji i przepływu danych,
+* **e)** Flask – środowisko API,
+* **f)** Docker – konteneryzacja środowisk,
+* **g)** inne: Shodan API, LeakCheck API, Rejestr.io.
+  **6.2.** Każdy z komponentów pozostaje objęty licencją przypisaną przez jego twórców.
+  **6.3.** Modyfikacje komponentów open source dokonywane lokalnie nie naruszają warunków ich licencji, o ile:
+* **a)** nie są rozpowszechniane komercyjnie bez zgody,
+* **b)** przestrzegane są warunki licencji (np. MIT, Apache, GNU).
+
+---
+
+### **7. Postanowienia końcowe**
+
+**7.1.** Administrator zastrzega sobie prawo do zmiany niniejszego regulaminu w dowolnym czasie.
+**7.2.** Wszelkie zmiany:
+
+* **a)** będą publikowane w Serwisie,
+* **b)** wchodzą w życie z chwilą ich publikacji,
+* **c)** nie działają wstecz na prawa nabyte.
+  **7.3.** W sprawach nieuregulowanych regulaminem zastosowanie mają odpowiednie przepisy prawa polskiego i unijnego.
+
+---
+
+> Reconica to więcej niż narzędzie. To system, w którym Ty spinasz fakty, a one – Sintra i Kaira – tworzą przyszłość informacji.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+**TERMS OF SERVICE FOR RECONICA.DEV**
+
+---
+
+### **1. General Provisions**
+
+**1.1.** These Terms of Service define the rules for using the reconica.dev website (hereinafter referred to as the "Service").
+**1.2.** The administrator of the Service and personal data is Antoni Czyż (or: \[company name or pseudonym, to be completed]), contact: \[e.g., [www.linkedin.com/in/tony-czyz-575371ba](http://www.linkedin.com/in/tony-czyz-575371ba)].
+**1.3.** The Service operates based on local IT infrastructure, with no data transferred to external processing centers.
+**1.4.** By using the Service, the user agrees to these Terms.
+
+---
+
+### **2. Description of the Service and Reconica System**
+
+**2.1.** Reconica is a next-generation intelligence system supported by artificial intelligence.
+**2.2.** The user interacts with digital agents within the Service:
+
+* **a)** Sintra – specializing in OSINT analysis,
+* **b)** Kaira – powered by the Mistral model, supporting decision-making and reporting.
+  **2.3.** Reconica is part of the **S.A.R.A.** ecosystem (System for Autonomous Reasoning and Analysis), designed to support autonomous reasoning and data analysis.
+  **2.4.** The system uses the following technologies and components:
+* **a)** local AI models (Gemma 3 and Mistral – used by agent Kaira),
+* **b)** Open WebUI interface,
+* **c)** integrated OSINT tools (Shodan, LeakCheck, Rejestr.io),
+* **d)** Docker containers for isolated environments,
+* **e)** Cloudflare Tunnel for secure user–host communication.
+
+---
+
+### **3. Technical Requirements and Security**
+
+**3.1.** The Service is available via HTTPS connection secured by Cloudflare Tunnel.
+**3.2.** All data is processed locally, without the use of external data centers or cloud services.
+**3.3.** The Service:
+
+* **a)** does not require user accounts, unless clearly stated otherwise,
+* **b)** may in the future offer optional registration for partners or testers.
+  **3.4.** By submitting files or queries for analysis, the user declares that:
+* **a)** they have the right to use the data,
+* **b)** the content does not infringe on third-party rights or applicable laws,
+* **c)** the data does not contain illegal or harmful content.
+
+---
+
+### **4. Privacy and Data Processing**
+
+**4.1.** The Service collects the following types of data:
+
+* **a)** technical data (IP address, HTTP headers, timestamps),
+* **b)** session data (system logs, events, error messages),
+* **c)** interaction content (chats with AI agents, API queries, uploaded files, generated reports),
+* **d)** login data (if login feature is enabled).
+  **4.2.** Data is:
+* **a)** stored exclusively on the administrator's local server,
+* **b)** encrypted in line with current IT security standards,
+* **c)** not accessible to third parties,
+* **d)** not sent to external cloud systems or APIs.
+  **4.3.** The administrator agrees to:
+* **a)** refrain from profiling user data,
+* **b)** refrain from using data for marketing purposes,
+* **c)** restrict access only to authorized system administrators.
+  **4.4.** In accordance with GDPR, the user has the right to:
+* **a)** obtain information on what data is stored,
+* **b)** access their personal data,
+* **c)** rectify incorrect or outdated data,
+* **d)** request data deletion (unless legally required for operation),
+* **e)** restrict processing,
+* **f)** file a complaint with the supervisory authority (e.g., PUODO in Poland).
+  **4.5.** Requests related to data processing and privacy should be directed to the administrator using the contact details in point 1.2.
+
+---
+
+### **5. Liability and Limitations**
+
+**5.1.** The administrator:
+
+* **a)** provides tools for OSINT analysis and AI interaction,
+* **b)** is not responsible for how users use the results,
+* **c)** does not guarantee full accuracy or completeness of AI-generated responses.
+  **5.2.** The user must:
+* **a)** use the Service in compliance with applicable law and good practice,
+* **b)** refrain from submitting illegal or prohibited content.
+  **5.3.** Content generated by Sintra and Kaira:
+* **a)** is for support purposes only,
+* **b)** should not be treated as formal expertise, legal advice, or investigative findings,
+* **c)** should be verified by the user.
+
+---
+
+### **6. Technologies and Licenses**
+
+**6.1.** The Service uses open-source software, including:
+
+* **a)** Open WebUI – AI user interface,
+* **b)** Gemma 3 – local language model,
+* **c)** Mistral – local language model used by Kaira,
+* **d)** n8n – automation and data workflow engine,
+* **e)** Flask – API environment,
+* **f)** Docker – containerization platform,
+* **g)** others: Shodan API, LeakCheck API, Rejestr.io.
+  **6.2.** Each component is subject to its respective license.
+  **6.3.** Local modifications of open-source components do not violate license terms, provided that:
+* **a)** they are not distributed commercially without permission,
+* **b)** license conditions (e.g., MIT, Apache, GNU) are respected.
+
+---
+
+### **7. Final Provisions**
+
+**7.1.** The administrator reserves the right to modify these Terms at any time.
+**7.2.** Any changes:
+
+* **a)** will be published on the Service,
+* **b)** take effect upon publication,
+* **c)** do not apply retroactively to acquired rights.
+  **7.3.** For matters not covered in these Terms, applicable Polish and EU laws shall apply.
+
+---
+
+> Reconica is more than a tool. It’s a system where you connect the facts, and they – Sintra and Kaira – build the future of intelligence.
+

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Regulamin | Reconica.dev</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: #e0e0e0;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 40px;
+      color: #ffffff;
+    }
+    pre {
+      white-space: pre-wrap;
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 8px;
+      line-height: 1.6;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>REGULAMIN KORZYSTANIA Z SERWISU RECONICA.DEV</h1>
+    <pre id="regulamin">Wczytywanie regulaminu...</pre>
+  </div>
+
+  <script>
+    fetch('regulamin.txt')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('regulamin').textContent = data;
+      })
+      .catch(error => {
+        document.getElementById('regulamin').textContent = 'Nie udało się wczytać regulaminu.';
+        console.error('Błąd:', error);
+      });
+  </script>
+</body>
+</html>

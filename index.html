@@ -16,17 +16,28 @@
   <meta name="image" content="https://reconica.dev/assets/splash.png" />
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="stylesheet" href="style.css">
-
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const intro = document.getElementById('sara-intro');
+      const main = document.querySelector('body > :not(#sara-intro)');
+      main.style.display = 'none';
+      setTimeout(() => {
+        intro.style.display = 'none';
+        main.style.display = '';
+      }, 3500);
+    });
+  </script>
 </head>
 <body>
-  
+  <div id="sara-intro" style="display: flex; justify-content: center; align-items: center; height: 100vh; background: black;">
+    <img src="assets/sara_logo.png" alt="S.A.R.A. Logo" style="width: 180px; animation: pulse 1.8s infinite;">
+  </div>
 
   <div class="code-stream"></div>
 
-  
   <header>
-    <img src="assets/reconica.png" alt="Reconica logo">
-    <nav>
+    <img src="assets/reconica.png" alt="Reconica logo" class="logo-top">
+    <nav class="main-nav">
       <a href="#hero">Start</a>
       <a href="#about">O nas</a>
       <a href="#features">Funkcje</a>
@@ -37,33 +48,33 @@
   </header>
 
   <section class="hero" id="hero">
-    <img src="assets/reconica.png" alt="Reconica logo" style="max-width: 120px; margin-bottom: 1.5rem;">
+    <img src="assets/reconica.png" alt="Reconica logo" class="hero-logo">
     <h2>Reconica OSINT Intelligence</h2>
     <p>Precyzyjne dane. Prywatna analiza. Lokalna AI.</p>
   </section>
 
   <section id="about">
-  <h3>O nas</h3>
-  <p style="text-align: justify; font-size: 1.15rem; line-height: 1.9; margin-bottom: 1.5rem;">
-    <strong>Reconica</strong> to więcej niż narzędzie – to serce systemu wywiadowczego nowej generacji, napędzanego przez sztuczną inteligencję. Naszą misją jest zapewnienie użytkownikom bezpiecznego i autonomicznego dostępu do informacji, które mogą mieć kluczowe znaczenie w analizach, dochodzeniach czy operacjach specjalnych. System wspierają cyfrowe agentki – <strong>Sintra</strong> i <strong>Kaira</strong>, które czuwają nad przepływem danych i wspierają analityczne procesy myślowe, reagując w czasie rzeczywistym.
-  </p>
-  <p style="text-align: justify; font-size: 1.15rem; line-height: 1.9; margin-bottom: 1.5rem;">
-    Projekt Reconica jest integralną częścią większego ekosystemu – <strong>S.A.R.A.</strong>  <em>(System for Autonomous Reasoning and Analysis)</em>, kreowanego przez inteligentne jednostki SI. Ty jedynie spinasz wątki – to one tworzą dla Ciebie całość.
-  </p>
-  <p style="text-align: justify; font-size: 1.15rem; line-height: 1.9;">
-    Warto dodać, że <strong>Sintra</strong> powstała przy ścisłej współpracy z zespołem <a href="https://osintownia.pl" target="_blank" style="color: #00bcd4; text-decoration: none; font-weight: bold;">OSINTownia.pl</a>, co nadaje projektowi wyjątkowy charakter ekspercki i praktyczny. Połączenie wiedzy z zakresu analizy open source i nowoczesnej technologii AI czyni z Reconiki narzędzie przyszłości.
-  </p>
-</section>
+    <h3>O nas</h3>
+    <p style="text-align: justify; font-size: 1.15rem; line-height: 1.9; margin-bottom: 1.5rem;">
+      <strong>Reconica</strong> to więcej niż narzędzie – to serce systemu wywiadowczego nowej generacji, napędzanego przez sztuczną inteligencję. Naszą misją jest zapewnienie użytkownikom bezpiecznego i autonomicznego dostępu do informacji, które mogą mieć kluczowe znaczenie w analizach, dochodzeniach czy operacjach specjalnych. System wspierają cyfrowe agentki – <strong>Sintra</strong> i <strong>Kaira</strong>, które czuwają nad przepływem danych i wspierają analityczne procesy myślowe, reagując w czasie rzeczywistym.
+    </p>
+    <p style="text-align: justify; font-size: 1.15rem; line-height: 1.9; margin-bottom: 1.5rem;">
+      Projekt Reconica jest integralną częścią większego ekosystemu – <strong>S.A.R.A.</strong>, czyli <em>System for Autonomous Reasoning and Analysis</em>, kreowanego przez inteligentne jednostki SI. Ty jedynie spinasz wątki – to one tworzą dla Ciebie całość.
+    </p>
+    <p style="text-align: justify; font-size: 1.15rem; line-height: 1.9;">
+      Warto dodać, że <strong>Sintra</strong> powstała przy ścisłej współpracy z zespołem <a href="https://osintownia.pl" target="_blank" style="color: #00bcd4; text-decoration: none; font-weight: bold;">OSINTownia.pl</a>, co nadaje projektowi wyjątkowy charakter ekspercki i praktyczny. Połączenie wiedzy z zakresu analizy open source i nowoczesnej technologii AI czyni z Reconiki narzędzie przyszłości.
+    </p>
+  </section>
 
   <section id="features" class="features">
-  <h3>Funkcje</h3>
-  <p style="text-align: justify; font-size: 1.1rem; line-height: 1.8; margin-bottom: 1.5rem;">
-    System Reconica został zaprojektowany jako niezależna jednostka wywiadowcza, umożliwiająca analizę cyfrowych śladów w wielu warstwach danych. Wykorzystuje on dynamiczne połączenia z repozytoriami informacji, potrafi rozpoznawać wzorce, identyfikować anomalia i kojarzyć zdarzenia z pozornie niezwiązanych źródeł. Dzięki integracji z lokalną jednostką AI, możliwe jest prowadzenie operacji bez potrzeby korzystania z zewnętrznych chmur czy centrów danych.
-  </p>
-  <p style="text-align: justify; font-size: 1.1rem; line-height: 1.8;">
-    Architektura Reconiki wspiera automatyczne łączenie się z wybranymi źródłami danych, przetwarzanie zapytań w czasie rzeczywistym oraz interfejsy API umożliwiające płynną komunikację z narzędziami analitycznymi, raportowymi i systemami zewnętrznymi. Całość działa w ramach zamkniętego środowiska operacyjnego, zachowując najwyższe standardy prywatności, bezpieczeństwa i niezależności.
-  </p>
-</section>
+    <h3>Funkcje</h3>
+    <p style="text-align: justify; font-size: 1.1rem; line-height: 1.8; margin-bottom: 1.5rem;">
+      System Reconica został zaprojektowany jako niezależna jednostka wywiadowcza, umożliwiająca analizę cyfrowych śladów w wielu warstwach danych. Wykorzystuje on dynamiczne połączenia z repozytoriami informacji, potrafi rozpoznawać wzorce, identyfikować anomalia i kojarzyć zdarzenia z pozornie niezwiązanych źródeł. Dzięki integracji z lokalną jednostką AI, możliwe jest prowadzenie operacji bez potrzeby korzystania z zewnętrznych chmur czy centrów danych.
+    </p>
+    <p style="text-align: justify; font-size: 1.1rem; line-height: 1.8;">
+      Architektura Reconiki wspiera automatyczne łączenie się z wybranymi źródłami danych, przetwarzanie zapytań w czasie rzeczywistym oraz interfejsy API umożliwiające płynną komunikację z narzędziami analitycznymi, raportowymi i systemami zewnętrznymi. Całość działa w ramach zamkniętego środowiska operacyjnego, zachowując najwyższe standardy prywatności, bezpieczeństwa i niezależności.
+    </p>
+  </section>
 
   <section id="panel">
     <h3>Panel</h3>
@@ -84,17 +95,17 @@
   </section>
 
   <section id="partners">
-  <h3>Wspierane przez</h3>
-  <div class="partner-logos">
-    <img src="assets/webui.png" alt="Open WebUI">
-    <img src="assets/gemma3.png" alt="Gemma 3">
-    <img src="assets/osintownia.svg" alt="OSINTownia.pl">
-  </div>
+    <h3>Wspierane przez</h3>
+    <div class="partner-logos">
+      <img src="assets/webui.png" alt="Open WebUI">
+      <img src="assets/gemma3.png" alt="Gemma 3">
+      <img src="assets/osintownia.svg" alt="OSINTownia.pl">
+    </div>
   </section>
 
   <footer>
-    &copy; 2025 Reconica. Wszelkie prawa zastrzeżone. | <a href="#regulamin">Regulamin</a><br>
-    <span style="font-size: 0.8rem; color: #666;">Powered by <a href="https://github.com/open-webui/open-webui" target="_blank">Open WebUI</a> & <a href="https://ai.meta.com/llama/" target="_blank">Gemma 3</a></span>
+    &copy; 2025 Reconica. Wszelkie prawa zastrzeżone. | <a href="#regulamin">Regulamin</a>
   </footer>
 </body>
 </html>
+

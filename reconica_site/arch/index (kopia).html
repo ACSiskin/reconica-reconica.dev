@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reconica OSINT Intelligence</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(160deg, #0f1115 0%, #1a1c22 100%);
+      color: #f5f5f5;
+      overflow-x: hidden;
+      animation: backgroundFade 20s ease-in-out infinite alternate;
+    }
+    @keyframes backgroundFade {
+      0% { background-color: #0f1115; }
+      100% { background-color: #1c1e24; }
+    }
+    header {
+      background-color: rgba(10, 10, 14, 0.85);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid #00bcd4;
+      box-shadow: 0 2px 10px rgba(0,188,212,0.1);
+    }
+    header img {
+      height: 48px;
+    }
+    nav a {
+      margin-left: 1.5rem;
+      color: #ccc;
+      text-decoration: none;
+      font-weight: 500;
+      position: relative;
+    }
+    nav a::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background: #00bcd4;
+      left: 0;
+      bottom: -4px;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.3s ease;
+    }
+    nav a:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+    .hero {
+      position: relative;
+      padding: 7rem 2rem 5rem;
+      text-align: center;
+      background: radial-gradient(ellipse at top, rgba(0,188,212,0.15) 0%, transparent 70%);
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      left: 0;
+      width: 100%;
+      height: 150%;
+      background: repeating-linear-gradient(135deg, rgba(0,188,212,0.05) 0px, rgba(0,188,212,0.05) 1px, transparent 1px, transparent 6px);
+      pointer-events: none;
+      z-index: 0;
+      animation: scanlines 20s linear infinite;
+    }
+    @keyframes scanlines {
+      0% { background-position: 0 0; }
+      100% { background-position: 0 100px; }
+    }
+    .hero img {
+      max-width: 120px;
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    .hero h2 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #00bcd4;
+      position: relative;
+      z-index: 1;
+      text-shadow: 0 0 10px #00bcd4;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      color: #ccc;
+      position: relative;
+      z-index: 1;
+    }
+    section {
+      padding: 4rem 2rem;
+      max-width: 1000px;
+      margin: auto;
+      position: relative;
+      z-index: 2;
+    }
+    section h3 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #00bcd4;
+      text-shadow: 0 0 5px #00acc1;
+    }
+    .features ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    .features li {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+    .features li::before {
+      content: '◆';
+      position: absolute;
+      left: 0;
+      color: #00bcd4;
+    }
+    .panel-button {
+      display: block;
+      text-align: center;
+      margin: 3rem auto;
+      animation: pulse 2s infinite;
+    }
+    .panel-button a {
+      background: linear-gradient(to right, #00bcd4, #007c91);
+      color: #000;
+      padding: 1.2rem 2.5rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.1rem;
+      box-shadow: 0 0 20px rgba(0,188,212,0.4), 0 0 40px rgba(0,188,212,0.2);
+      transition: background 0.3s, transform 0.2s;
+    }
+    .panel-button a:hover {
+      background: linear-gradient(to right, #00acc1, #006774);
+      transform: scale(1.05);
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    footer {
+      background-color: #111319;
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #888;
+      border-top: 1px solid #00bcd4;
+      box-shadow: inset 0 1px 10px rgba(0,188,212,0.1);
+    }
+    footer a {
+      color: #00bcd4;
+      text-decoration: none;
+    }
+      @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+      .hero h2 {
+        font-size: 2rem;
+      }
+      .hero p, section p, .panel-button a {
+        font-size: 1rem;
+      }
+      .panel-button a {
+        padding: 1rem 2rem;
+      }
+    }
+      body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 20%, rgba(0,188,212,0.05), transparent 80%),
+                  radial-gradient(circle at 80% 80%, rgba(0,188,212,0.03), transparent 90%);
+      pointer-events: none;
+      z-index: 0;
+      animation: backgroundGlow 30s ease-in-out infinite;
+    }
+
+    @keyframes backgroundGlow {
+      0% { transform: scale(1); opacity: 0.6; }
+      50% { transform: scale(1.05); opacity: 1; }
+      100% { transform: scale(1); opacity: 0.6; }
+    }
+      .code-stream {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      background: repeating-linear-gradient(
+        180deg,
+        rgba(0, 188, 212, 0.03) 0px,
+        rgba(0, 188, 212, 0.03) 2px,
+        transparent 2px,
+        transparent 4px
+      );
+      animation: scrollcode 20s linear infinite;
+    }
+
+    @keyframes scrollcode {
+      from { background-position: 0 0; }
+      to { background-position: 0 100vh; }
+    }
+  </style>
+
+</head>
+<body>
+  
+
+  <div class="code-stream"></div>
+
+  
+  <header>
+    <img src="favicon.png" alt="Reconica logo">
+    <nav>
+      <a href="#hero">Start</a>
+      <a href="#about">O nas</a>
+      <a href="#features">Funkcje</a>
+      <a href="#panel">Panel</a>
+      <a href="#contact">Kontakt</a>
+      <a href="#regulamin">Regulamin</a>
+    </nav>
+  </header>
+
+  <section class="hero" id="hero">
+    <img src="favicon.png" alt="Reconica logo">
+    <h2>Reconica OSINT Intelligence</h2>
+    <p>Precyzyjne dane. Prywatna analiza. Lokalna AI.</p>
+  </section>
+
+  <section id="about">
+  <h3>O nas</h3>
+  <p style="text-align: justify; font-size: 1.15rem; line-height: 1.9; margin-bottom: 1.5rem;">
+    <strong>Reconica</strong> to więcej niż narzędzie – to serce systemu wywiadowczego nowej generacji, napędzanego przez sztuczną inteligencję. Naszą misją jest zapewnienie użytkownikom bezpiecznego i autonomicznego dostępu do informacji, które mogą mieć kluczowe znaczenie w analizach, dochodzeniach czy operacjach specjalnych. System wspierają cyfrowe agentki – <strong>Sintra</strong> i <strong>Kaira</strong>, które czuwają nad przepływem danych i wspierają analityczne procesy myślowe, reagując w czasie rzeczywistym.
+  </p>
+  <p style="text-align: justify; font-size: 1.15rem; line-height: 1.9; margin-bottom: 1.5rem;">
+    Projekt Reconica jest integralną częścią większego ekosystemu – <strong>S.A.R.A.</strong>, czyli <em>Systemu Analizy Rozszerzonej Autonomii</em>, kreowanego przez inteligentne jednostki SI. Ty jedynie spinasz wątki – to one tworzą dla Ciebie całość.
+  </p>
+  <p style="text-align: justify; font-size: 1.15rem; line-height: 1.9;">
+    Warto dodać, że <strong>Sintra</strong> powstała przy ścisłej współpracy z zespołem <a href="https://osintownia.pl" target="_blank" style="color: #00bcd4; text-decoration: none; font-weight: bold;">OSINTownia.pl</a>, co nadaje projektowi wyjątkowy charakter ekspercki i praktyczny. Połączenie wiedzy z zakresu analizy open source i nowoczesnej technologii AI czyni z Reconiki narzędzie przyszłości.
+  </p>
+</section>
+
+  <section id="features" class="features">
+  <h3>Funkcje</h3>
+  <p style="text-align: justify; font-size: 1.1rem; line-height: 1.8; margin-bottom: 1.5rem;">
+    System Reconica został zaprojektowany jako niezależna jednostka wywiadowcza, umożliwiająca analizę cyfrowych śladów w wielu warstwach danych. Wykorzystuje on dynamiczne połączenia z repozytoriami informacji, potrafi rozpoznawać wzorce, identyfikować anomalia i kojarzyć zdarzenia z pozornie niezwiązanych źródeł. Dzięki integracji z lokalną jednostką AI, możliwe jest prowadzenie operacji bez potrzeby korzystania z zewnętrznych chmur czy centrów danych.
+  </p>
+  <p style="text-align: justify; font-size: 1.1rem; line-height: 1.8;">
+    Architektura Reconiki wspiera automatyczne łączenie się z wybranymi źródłami danych, przetwarzanie zapytań w czasie rzeczywistym oraz interfejsy API umożliwiające płynną komunikację z narzędziami analitycznymi, raportowymi i systemami zewnętrznymi. Całość działa w ramach zamkniętego środowiska operacyjnego, zachowując najwyższe standardy prywatności, bezpieczeństwa i niezależności.
+  </p>
+</section>
+
+  <section id="panel">
+    <h3>Panel</h3>
+    <p class="panel-button">
+      <a href="https://panel.reconica.dev" target="_blank">Wejdź do systemu</a>
+    </p>
+  </section>
+
+  <section id="contact">
+    <h3>Kontakt</h3>
+    <p>📧 kontakt@reconica.dev</p>
+    <p>🌐 <a href="https://github.com/reconica" target="_blank">github.com/reconica</a></p>
+  </section>
+
+  <section id="regulamin">
+    <h3>Regulamin</h3>
+    <p>Regulamin korzystania z systemu dostępny jest <a href="#">tutaj</a>.</p>
+  </section>
+
+  <footer>
+    &copy; 2025 Reconica. Wszelkie prawa zastrzeżone. | <a href="#regulamin">Regulamin</a><br>
+    <span style="font-size: 0.8rem; color: #666;">Powered by <a href="https://github.com/open-webui/open-webui" target="_blank">Open WebUI</a> & <a href="https://ai.meta.com/llama/" target="_blank">Gemma 3</a></span>
+  </footer>
+</body>
+</html>

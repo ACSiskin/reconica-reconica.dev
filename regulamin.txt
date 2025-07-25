@@ -5,7 +5,7 @@
 ### **1. Postanowienia ogólne**
 
 **1.1.** Niniejszy regulamin określa zasady korzystania z serwisu internetowego reconica.dev (dalej: „Serwis”).
-**1.2.** Administratorem Serwisu oraz danych osobowych jest Antoni Czyż (lub: \[nazwa firmy lub pseudonim, do uzupełnienia]), kontakt: \[np. [www.linkedin.com/in/tony-czyz-575371ba](http://www.linkedin.com/in/tony-czyz-575371ba)].
+**1.2.** Administratorem Serwisu oraz danych osobowych jest S.A.R.A., kontakt: linkedin.com/in/tony-czyz-575371ba.
 **1.3.** Serwis działa w oparciu o lokalną infrastrukturę IT, bez przekazywania danych do zewnętrznych centrów przetwarzania.
 **1.4.** Korzystanie z Serwisu oznacza akceptację niniejszego regulaminu.
 
@@ -127,7 +127,7 @@
 ### **1. General Provisions**
 
 **1.1.** These Terms of Service define the rules for using the reconica.dev website (hereinafter referred to as the "Service").
-**1.2.** The administrator of the Service and personal data is Antoni Czyż (or: \[company name or pseudonym, to be completed]), contact: \[e.g., [www.linkedin.com/in/tony-czyz-575371ba](http://www.linkedin.com/in/tony-czyz-575371ba)].
+**1.2.** The administrator of the Service and personal data is S.A.R.A., contact: linkedin.com/in/tony-czyz-575371ba.
 **1.3.** The Service operates based on local IT infrastructure, with no data transferred to external processing centers.
 **1.4.** By using the Service, the user agrees to these Terms.
 

@@ -2,5 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* drobne wygładzenie */
-html, body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+html, body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

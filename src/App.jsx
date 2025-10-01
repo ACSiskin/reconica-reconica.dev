@@ -33,12 +33,12 @@ const copy = {
       "* Wewnętrzna architektura, zestaw źródeł, reguły agentów oraz techniki łączenia sygnałów pozostają niejawne.",
     partnersH: "Partnerzy i współpraca",
     partnersP:
-      "Wspieramy zespoły analityczne, SOC/CTI, compliance oraz działy badawcze. Jeżeli chcesz porozmawiać o pilotażu lub integracji — odezwij się. Pokażemy, jak rozumiemy ‘przewagę informacyjną’ i gdzie zaczyna się wartość.",
+       "Współpracujemy z zespołami analitycznymi oraz jednostkami badawczymi przy projektach OSINT/CTI/DFIR. W ramach wybranych inicjatyw pracujemy m.in. z zespołem OSINTownia.pl. Szczegóły integracji i metody pozostają niejawne.",
     bannerH: "Gotowy, by wejść do Reconica OSINT Intelligence?",
     bannerP: "Dostęp wyłącznie dla zweryfikowanych użytkowników.",
     contactH: "Kontakt",
     contactP:
-      "Skontaktuj się, jeśli chcesz porozmawiać o terminie wdrożenia, wersji on‑prem lub wymaganiach formalnych.",
+       "Jeśli masz pytanie merytoryczne lub dotyczące współpracy badawczo-analitycznej, napisz do nas odpowiednim kanałem — zespół odpowiada selektywnie.",
     contactGen: "Zapytania ogólne",
     contactBiz: "Współpraca",
     contactSup: "Wsparcie",
@@ -75,12 +75,12 @@ const copy = {
       "* Internal architecture, source sets, agent rules and signal‑fusion techniques remain undisclosed.",
     partnersH: "Partners & collaboration",
     partnersP:
-      "We support analytical teams, SOC/CTI, compliance and research departments. If you want to discuss a pilot or integration — reach out. We’ll show how we understand ‘information advantage’ and where value begins.",
+       "We collaborate with analytical and research teams on OSINT/CTI/DFIR initiatives. Selected projects include work with the OSINTownia.pl team. Integration details and methods remain undisclosed.",
     bannerH: "Ready to enter Reconica OSINT Intelligence?",
     bannerP: "Access for verified users only.",
     contactH: "Contact",
     contactP:
-      "Get in touch to discuss timelines, on‑prem options or formal requirements.",
+     "For research-oriented or analytical inquiries, reach out via the appropriate channel — the team responds selectively.",
     contactGen: "General inquiries",
     contactBiz: "Partnerships",
     contactSup: "Support",
@@ -254,7 +254,7 @@ export default function App() {
         <h2 className="text-2xl font-bold md:text-3xl">{t("partnersH")}</h2>
         <p className="mt-4 max-w-3xl text-white/80">{t("partnersP")}</p>
         <div className="mt-8 grid grid-cols-2 gap-4 opacity-80 md:grid-cols-4">
-          <Partner name="OSINT"/>
+          <Partner name="OSINTownia.pl"/>
           <Partner name="CTI"/>
           <Partner name="DFIR"/>
           <Partner name="R&D"/>
@@ -286,9 +286,9 @@ export default function App() {
           <h2 className="text-2xl font-bold md:text-3xl">{t("contactH")}</h2>
           <p className="mt-4 max-w-3xl text-white/80">{t("contactP")}</p>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
-            <ContactCard title={t("contactGen")} value="contact@reconica.ai" />
-            <ContactCard title={t("contactBiz")} value="partners@reconica.ai" />
-            <ContactCard title={t("contactSup")} value="support@reconica.ai" />
+            <ContactCard title={t("contactGen")} value="kontakt@osintownia.dev" />
+            <ContactCard title={t("contactBiz")} value="p.oleksiak@osintownia.dev" />
+            <ContactCard title={t("contactSup")} value="support@reconica.dev" />
           </div>
         </div>
       </section>

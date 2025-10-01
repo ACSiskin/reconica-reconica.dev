@@ -137,21 +137,18 @@ export default function App() {
       {/* Navigation */}
       <header className="sticky top-0 z-20 backdrop-blur-lg bg-black/30 border-b border-white/10">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:px-8">
-          <a href="#top" className="group inline-flex items-center gap-3">
-            {/* Logo at top-left */}
-            <div className="h-9 w-9 overflow-hidden rounded-xl bg-white/10 ring-1 ring-white/15 grid place-items-center">
-              {LOGO_SRC ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={LOGO_SRC} alt="Reconica" className="h-7 w-7 object-contain" />
-              ) : (
-                <span className="text-sm font-black tracking-wide">R</span>
-              )}
-            </div>
-            <div>
-              <div className="text-sm uppercase tracking-widest text-white/70">Reconica</div>
-              <div className="-mt-0.5 text-base font-semibold">OSINT Intelligence</div>
-            </div>
-          </a>
+<a href="#top" className="group inline-flex items-center gap-3">
+  <img
+    src={LOGO_SRC}
+    alt="Reconica"
+    className="h-7 w-7 object-contain select-none"
+    draggable="false"
+  />
+  <div>
+    <div className="text-sm uppercase tracking-widest text-white/70">Reconica</div>
+    <div className="-mt-0.5 text-base font-semibold">OSINT Intelligence</div>
+  </div>
+</a>
 
           <nav className="hidden md:flex items-center gap-6 text-sm">
             <a href="#about" className="hover:text-white/80 transition-colors">{t("navAbout")}</a>

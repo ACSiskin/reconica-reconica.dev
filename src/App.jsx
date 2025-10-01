@@ -286,7 +286,7 @@ export default function App() {
           <h2 className="text-2xl font-bold md:text-3xl">{t("contactH")}</h2>
           <p className="mt-4 max-w-3xl text-white/80">{t("contactP")}</p>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
-            <ContactCard title={t("contactGen")} value="hello@reconica.ai" />
+            <ContactCard title={t("contactGen")} value="contact@reconica.ai" />
             <ContactCard title={t("contactBiz")} value="partners@reconica.ai" />
             <ContactCard title={t("contactSup")} value="support@reconica.ai" />
           </div>

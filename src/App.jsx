@@ -141,7 +141,7 @@ export default function App() {
   <img
     src={LOGO_SRC}
     alt="Reconica"
-    className="h-7 w-7 object-contain select-none"
+    className="h-10 w-10 object-contain select-none"
     draggable="false"
   />
   <div>
@@ -296,14 +296,7 @@ export default function App() {
       {/* Footer */}
       <footer className="border-t border-white/10 py-10">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-4 text-sm text-white/60 md:flex-row md:px-8">
-          <div>© {new Date().getFullYear()} Reconica. All rights reserved.</div>
-          <div className="flex items-center gap-4">
-            <a href="#about" className="hover:text-white/80">{t("footerAbout")}</a>
-            <span className="opacity-30">·</span>
-            <a href="#contact" className="hover:text-white/80">{t("footerContact")}</a>
-            <span className="opacity-30">·</span>
-            <a href="/roi" className="hover:text-white/80">{t("footerLogin")}</a>
-          </div>
+          <div>© {new Date().getFullYear()} Reconica OSINT Intelligence. All rights reserved.</div>
         </div>
       </footer>
     </div>

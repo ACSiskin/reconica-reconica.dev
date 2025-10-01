@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
-const LOGO_SRC = "/assets/ROILogo.png"; 
+import roiLogo from "./assets/ROILogo.png";
+const LOGO_SRC = roiLogo;
 
 const copy = {
   pl: {

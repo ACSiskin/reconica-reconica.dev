@@ -286,8 +286,8 @@ export default function App() {
           <h2 className="text-2xl font-bold md:text-3xl">{t("contactH")}</h2>
           <p className="mt-4 max-w-3xl text-white/80">{t("contactP")}</p>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
-            <ContactCard title={t("contactGen")} value="kontakt@osintownia.dev" />
-            <ContactCard title={t("contactBiz")} value="p.oleksiak@osintownia.dev" />
+            <ContactCard title={t("contactGen")} value="kontakt@osintownia.pl" />
+            <ContactCard title={t("contactBiz")} value="p.oleksiak@osintownia.pl" />
             <ContactCard title={t("contactSup")} value="support@reconica.dev" />
           </div>
         </div>

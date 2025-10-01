@@ -1,1 +1,6 @@
-html,body{margin:0;background:#000;color:#fff;font-family:system-ui,Arial,sans-serif}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* drobne wygładzenie */
+html, body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }

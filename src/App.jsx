@@ -141,7 +141,7 @@ export default function App() {
   <img
     src={LOGO_SRC}
     alt="Reconica"
-    className="h-10 w-10 object-contain select-none"
+    className="h-20 w-20 object-contain select-none"
     draggable="false"
   />
   <div>

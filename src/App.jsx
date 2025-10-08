@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 
 import roiLogo from "./assets/ROILogo.png";
 const LOGO_SRC = roiLogo;
+const ROI_URL = "https://panel.reconica.dev";
 
 const copy = {
   pl: {
@@ -156,7 +157,7 @@ export default function App() {
             <a href="#contact" className="hover:text-white/80 transition-colors">{t("navContact")}</a>
             <LangSwitcher lang={lang} setLang={setLang} />
             <a
-              href="/roi"
+              href={ROI_URL}
               className="rounded-xl border border-white/20 bg-white/10 px-4 py-2 font-semibold backdrop-blur hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/40"
             >
               {t("navLogin")}

@@ -3,7 +3,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 
 import roiLogo from "./assets/ROILogo.png";
 const LOGO_SRC = roiLogo;
-const ROI_URL = "https://panel.reconica.dev";
+const ROI_URL = "https://roi.reconica.dev";
 
 const copy = {
   pl: {
@@ -34,7 +34,7 @@ const copy = {
       "* Wewnętrzna architektura, zestaw źródeł, reguły agentów oraz techniki łączenia sygnałów pozostają niejawne.",
     partnersH: "Partnerzy i współpraca",
     partnersP:
-       "Współpracujemy z zespołami analitycznymi oraz jednostkami badawczymi przy projektach OSINT/CTI/DFIR. W ramach wybranych inicjatyw pracujemy m.in. z zespołem OSINTownia.pl. Szczegóły integracji i metody pozostają niejawne.",
+       "To projekt edukacyjno-badawczy z obszaru OSINT/CTI/DFIR, ukierunkowany na rozwój kompetencji, testowanie podejść analitycznych oraz doskonalenie metod pracy z danymi i artefaktami cyfrowymi. W ramach inicjatywy realizowane są prace koncepcyjne, eksperymenty, prototypowanie rozwiązań oraz opracowywanie wniosków i dokumentacji, tak aby przekładać rezultaty na praktyczne zastosowania. Szczegóły integracji oraz stosowane metody pozostają niejawne.",
     bannerH: "Gotowy, by wejść do Reconica OSINT Intelligence?",
     bannerP: "Dostęp wyłącznie dla zweryfikowanych użytkowników.",
     contactH: "Kontakt",
@@ -76,7 +76,7 @@ const copy = {
       "* Internal architecture, source sets, agent rules and signal‑fusion techniques remain undisclosed.",
     partnersH: "Partners & collaboration",
     partnersP:
-       "We collaborate with analytical and research teams on OSINT/CTI/DFIR initiatives. Selected projects include work with the OSINTownia.pl team. Integration details and methods remain undisclosed.",
+       "This is an educational and research project in the OSINT/CTI/DFIR domain, focused on skills development, testing analytical approaches, and refining methods for working with data and digital artifacts. The initiative includes conceptual work, experimentation, solution prototyping, and the production of findings and documentation to translate results into practical applications. Integration details and the methods used remain non-disclosed.",
     bannerH: "Ready to enter Reconica OSINT Intelligence?",
     bannerP: "Access for verified users only.",
     contactH: "Contact",
@@ -255,10 +255,10 @@ export default function App() {
         <h2 className="text-2xl font-bold md:text-3xl">{t("partnersH")}</h2>
         <p className="mt-4 max-w-3xl text-white/80">{t("partnersP")}</p>
         <div className="mt-8 grid grid-cols-2 gap-4 opacity-80 md:grid-cols-4">
-          <Partner name="OSINTownia.pl"/>
-          <Partner name="CTI"/>
-          <Partner name="DFIR"/>
-          <Partner name="R&D"/>
+         
+          <Partner name="R.O.I"/>
+          <Partner name="S.A.R.A."/>
+      
         </div>
       </section>
 
@@ -287,8 +287,8 @@ export default function App() {
           <h2 className="text-2xl font-bold md:text-3xl">{t("contactH")}</h2>
           <p className="mt-4 max-w-3xl text-white/80">{t("contactP")}</p>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
-            <ContactCard title={t("contactGen")} value="kontakt@osintownia.pl" />
-            <ContactCard title={t("contactBiz")} value="p.oleksiak@osintownia.pl" />
+            <ContactCard title={t("contactGen")} value="" />
+            <ContactCard title={t("contactBiz")} value="antoni.czyz@outlook.com" />
             <ContactCard title={t("contactSup")} value="support@reconica.dev" />
           </div>
         </div>

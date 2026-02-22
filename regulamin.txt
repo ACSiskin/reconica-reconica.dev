@@ -1,53 +1,52 @@
-**REGULAMIN KORZYSTANIA Z SERWISU RECONICA.DEV (LANDING / MATERIAŁY BADAWCZE)**
+**REGULAMIN KORZYSTANIA Z SERWISU RECONICA.DEV**
 
 ---
 
-### **1. Postanowienia ogólne**
+### 1. Postanowienia ogólne
 
-**1.1.** Niniejszy regulamin określa zasady korzystania z serwisu internetowego reconica.dev (dalej: „Serwis”).
-**1.2.** Serwis ma charakter informacyjny i badawczy (landing), prezentuje materiały koncepcyjne oraz dokumenty (PDF) związane z HRP / MIND_OS.
-**1.3.** Administratorem Serwisu jest zespół Reconica. Kontakt: **antoni.czyz@outlook.com** lub **support@reconica.dev**.
-**1.4.** Korzystanie z Serwisu oznacza akceptację niniejszego regulaminu.
+1.1. Niniejszy regulamin określa zasady korzystania z serwisu internetowego reconica.dev („Serwis”).
 
----
+1.2. Serwis ma charakter informacyjny oraz badawczo‑dokumentacyjny. Publikowane materiały opisują koncepcje, architekturę i notatki badawcze związane z HRP / MIND_OS oraz wdrożeniami referencyjnymi.
 
-### **2. Zakres i charakter Serwisu**
-
-**2.1.** Serwis nie jest sklepem ani usługą wymagającą rejestracji użytkownika.
-**2.2.** Serwis może zawierać odnośniki do materiałów zewnętrznych (np. YouTube) oraz do niezależnych środowisk/produktów (np. systemów referencyjnych).
-**2.3.** Odnośniki prowadzą do zasobów, które mogą posiadać własne regulaminy i polityki prywatności — użytkownik korzysta z nich na własną odpowiedzialność.
+1.3. Kontakt:
+- **Biznes / współpraca:** p.oleksiak@osintownia.pl  
+- **Techniczno‑badawcze:** antoni.czyz@outlook.com  
+- Profil LinkedIn: https://www.linkedin.com/in/tony-czyz-575371ba/
 
 ---
 
-### **3. Dane, prywatność i zewnętrzni dostawcy**
+### 2. Zakres i ograniczenia
 
-**3.1.** Serwis w wersji landing jest stroną statyczną. Nie wymaga podawania danych osobowych do samego przeglądania treści.
-**3.2.** Serwis może być hostowany/obsługiwany przez zewnętrznych dostawców infrastruktury (np. hosting statyczny/CDN) w celu dostarczenia treści.
-**3.3.** Linki do serwisów zewnętrznych (np. YouTube) mogą powodować przetwarzanie danych przez te serwisy (np. adres IP, identyfikatory urządzenia, pliki cookies) — zależnie od ich ustawień.
-**3.4.** Jeżeli Serwis w przyszłości wdroży analitykę lub formularze, regulamin i/lub polityka prywatności zostaną zaktualizowane.
+2.1. Serwis nie stanowi oferty handlowej w rozumieniu przepisów prawa, chyba że wyraźnie wskazano inaczej.
 
----
+2.2. Materiały mogą zawierać uproszczenia (diagramy, skróty myślowe) służące prezentacji koncepcji. Nie są one pełną dokumentacją wdrożeniową.
 
-### **4. Materiały i prawa autorskie**
-
-**4.1.** Treści publikowane w Serwisie (teksty, grafiki, układ) są chronione prawem autorskim, o ile nie wskazano inaczej.
-**4.2.** Dokumenty (PDF) i materiały badawcze mogą być udostępniane do celów informacyjnych; cytowanie jest dozwolone z podaniem źródła.
+2.3. Informacje w Serwisie nie stanowią porady prawnej ani gwarancji określonych rezultatów.
 
 ---
 
-### **5. Odpowiedzialność i zastrzeżenia**
+### 3. Linki i zasoby zewnętrzne
 
-**5.1.** Treści mają charakter informacyjny i badawczy. Nie stanowią porady prawnej, finansowej, medycznej ani gwarancji określonego rezultatu.
-**5.2.** Administrator nie ponosi odpowiedzialności za działanie serwisów zewnętrznych, do których prowadzą linki.
-**5.3.** Administrator dokłada starań, aby treści były aktualne i poprawne, jednak mogą zawierać uproszczenia i skróty.
+3.1. Serwis może zawierać odnośniki do serwisów zewnętrznych (np. YouTube, LinkedIn). Kliknięcie w link powoduje przejście do serwisu zewnętrznego, który może stosować własne pliki cookie i zasady prywatności.
 
----
-
-### **6. Kontakt i zmiany regulaminu**
-
-**6.1.** Pytania i uwagi: **antoni.czyz@outlook.com**, **support@reconica.dev**.
-**6.2.** Regulamin może być aktualizowany. Najnowsza wersja obowiązuje od momentu publikacji w Serwisie.
+3.2. Serwis nie ponosi odpowiedzialności za treści i działania serwisów zewnętrznych.
 
 ---
 
-**Data aktualizacji:** 2026-02-22
+### 4. Prawa autorskie
+
+4.1. Układ strony, teksty i materiały stworzone na potrzeby Serwisu mogą podlegać ochronie prawnej. Niedozwolone jest kopiowanie w całości lub w części bez zgody, z wyjątkiem dozwolonego użytku i cytatu.
+
+4.2. Dokumenty PDF udostępniane w Serwisie mogą mieć odrębnych autorów lub licencje — należy stosować się do wskazań w samych dokumentach.
+
+---
+
+### 5. Odpowiedzialność i zmiany
+
+5.1. Serwis jest udostępniany „tak jak jest” (as‑is). Administrator dokłada starań, aby treści były aktualne i rzetelne, jednak nie gwarantuje braku błędów.
+
+5.2. Regulamin może ulec zmianie. Aktualna wersja jest publikowana w Serwisie.
+
+---
+
+**Data aktualizacji:** 2026‑02‑22

@@ -1,665 +1,945 @@
+
 import { useEffect, useMemo, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
-import hrpLogo from "./assets/HRP_LOGO.jpeg";
+import hrpLogo from "./assets/HRP_logo_white.png";
+import hrpLogoGold from "./assets/HRP_logo_gold.png";
 
-const LOGO_SRC = hrpLogo;
+const YT_URL = "https://www.youtube.com/watch?v=yqasKddWLLg";
 
-// Public docs (served from /public in Vite)
 const DOCS = {
-  mindOs: "/docs/MIND_OS_Cognitive_Architecture_v3.1.pdf",
-  dtr: "/docs/VESPER_DTR_v1.2.pdf",
+  mindOs: "/docs/MIND_OS_whitepaper_v3.1_EN.pdf",
+  vesperDtr: "/docs/VESPER_DTR_v1.2_PL.pdf",
 };
 
-const VIDEO = {
-  youtubeUrl: "https://www.youtube.com/watch?v=yqasKddWLLg",
-};
+const STORAGE_KEY = "reconica_lang";
 
 const copy = {
   pl: {
-    navAbstract: "Abstrakt",
-    navContrib: "Wkład",
-    navArchitecture: "Architektura",
-    navExperiments: "Eksperymenty",
-    navImplementations: "Implementacje",
-    navDocs: "Dokumenty",
-    navContact: "Kontakt",
-
-    topBadge: "HRP / MIND_OS • architektura poznawcza agentów",
-    heroTitle: "Homeostatic Regulation Protocol",
-    heroSubtitle:
-      "Warstwa wewnętrznej regulacji agenta: homeostaza, popędy, metabolizm poznawczy i konsolidacja pamięci.",
-    heroP:
-      "HRP pozycjonuje się obok protokołów narzędziowych i komunikacyjnych (MCP/ACP/A2A): zamiast transportu kontekstu, adresuje stabilność zachowania, koszt akcji i autonomię w długich horyzontach.",
-    ctaPrimary: "Czytaj whitepaper",
-    ctaSecondary: "Zobacz architekturę",
-
-    abstractTitle: "Abstrakt",
-    abstractP1:
-      "W praktyce agentowej brak stabilnej autonomii rzadko wynika z „braku promptu”. Częściej to efekt braku regulatora stanu: kosztów poznawczych, priorytetów, popędów oraz wygaszania napięcia.",
-    abstractP2:
-      "HRP wprowadza pętlę regulacji wewnętrznej, która kontroluje przełączanie trybów decyzyjnych, budżety energii/uwagi oraz konsolidację pamięci epizodycznej do narracji (system sleep).",
-
-    contribTitle: "Kluczowy wkład",
-    contrib1Title: "HRP ≠ protokół komunikacji",
-    contrib1P:
-      "MCP/ACP/A2A rozwiązują głównie transport kontekstu i współpracę między agentami. HRP reguluje „dlaczego/kiedy/jak” agent działa — wewnątrz instancji.",
-    contrib2Title: "Metabolizm poznawczy",
-    contrib2P:
-      "Agent posiada budżet energii (uwaga/obciążenie). Wysoki koszt uruchamia refleksję, niski — heurystyki. Ciało (akcje narzędziowe) uruchamiane jest tylko, gdy warto.",
-    contrib3Title: "Homeostaza i wygaszanie",
-    contrib3P:
-      "Stany (np. PAD) oraz popędy podlegają inercji, decay i powrotowi do baseline — stabilizując zachowanie bez „sztywnej dyscypliny promptowej”.",
-    contrib4Title: "Konsolidacja narracyjna",
-    contrib4P:
-      "„Sen systemowy” konsoliduje epizody do autobiografii i modelu JA, redukując drift i poprawiając spójność długich sesji.",
-
-    archTitle: "Pozycjonowanie w stosie agentowym",
-    archLead:
-      "HRP działa wewnątrz instancji. Protokoły typu MCP/ACP/A2A otaczają agenta — łączą narzędzia, kontekst i współpracę.",
-    archCard1Title: "Zewnętrze (tooling / współpraca)",
-    archCard1Bullets: ["MCP / ACP / A2A", "Kontekst, narzędzia, kanały", "Interoperacyjność agentów"],
-    archCard2Title: "Wnętrze (regulacja / autonomia)",
-    archCard2Bullets: ["HRP", "Homeostaza + drives + PAD", "Router decyzyjny + budżety", "Sleep / konsolidacja"],
-
-    curiosTitle: "Ciekawostki (w stylu research)",
-    curios1: "Ten sam bodziec ≠ ten sam efekt: appraisal zależy od historii epizodów i aktywnych drive’ów.",
-    curios2: "Najczęstsza porażka agentów to „over-tooling”: HRP minimalizuje zbędne akcje narzędziowe.",
-    curios3: "Drift narracyjny to nie tylko pamięć — to brak wygaszania i brak konsolidacji.",
-    curios4: "Najtańszy zysk jakości często daje meta-kontrola (kiedy przejść w refleksję), nie „dłuższy prompt”.",
-
-    expTitle: "Eksperymenty i metryki",
-    expLead:
-      "Strona jest pozycjonowana badawczo, więc pokazujemy metryki, a nie obietnice. Poniżej przykładowy zestaw, który dobrze waliduje HRP.",
-    exp1Title: "Stabilność w długiej sesji",
-    exp1P: "Dryf zachowania vs powrót do baseline (N=300–2000 tur).",
-    exp2Title: "Koszt narzędzi i decyzji",
-    exp2P: "Ile tool-call’i agent wykonuje na jednostkę celu (przy zachowaniu jakości).",
-    exp3Title: "Odporność na szum bodźców",
-    exp3P: "Czy appraisal filtruje szum i utrzymuje priorytety bez eskalacji kosztów.",
-    exp4Title: "Bezpieczeństwo i gating",
-    exp4P: "Czy safety gate blokuje wysokie ryzyko przy minimalnej degradacji użyteczności.",
-
-    implTitle: "Reference implementations",
-    implLead:
-      "Aplikacje nie są tu „produktem do kupienia” — są implementacjami referencyjnymi, które dostarczają danych z pola i pozwalają walidować HRP.",
-    impl1Title: "R.O.I.",
-    impl1P: "Środowisko operacyjne, gdzie liczy się koszt akcji i precyzyjne priorytetyzowanie.",
-    impl2Title: "S.A.R.A.",
-    impl2P: "Asystent ciągły — nacisk na stabilność narracji, spójność i konsolidację pamięci.",
-    impl3Title: "V.E.S.P.E.R.",
-    impl3P: "System narzędziowy (tooling-heavy) — idealny do badania meta-kontroli i ograniczania over-tooling.",
-
-    docsTitle: "Dokumenty",
-    docsLead:
-      "Poniżej znajdują się publiczne materiały techniczne (PDF). Jeśli publikujesz wersje nowsze — podmień pliki w /public/docs.",
-    docs1Title: "MIND_OS / HRP Whitepaper",
-    docs1P: "V.E.S.P.E.R. Alpha 2.0 — MIND_OS Cognitive Architecture (v3.1).",
-    docs2Title: "V.E.S.P.E.R. DTR",
-    docs2P: "Dokumentacja techniczno-ruchowa (DTR) v1.2 (naukowa, FULL).",
-
-    videoTitle: "Talk / Demo",
-    videoLead:
-      "Materiał wideo jako artefakt badawczy: wprowadzenie koncepcyjne i narracyjne do HRP/MIND_OS.",
-    videoBullets: [
-      "Motywacja: dlaczego same protokoły kontekstowe nie wystarczają",
-      "Homeostaza, popędy i koszt poznawczy",
-      "Jak HRP pozycjonuje się względem MCP/ACP/A2A",
-    ],
-    videoButton: "Otwórz na YouTube",
-
-    ethicsTitle: "Ograniczenia i bezpieczeństwo",
-    ethicsP:
-      "HRP jest warstwą regulacji i nie zastępuje polityk bezpieczeństwa, weryfikacji narzędzi ani zgodności prawnej. Projekt zakłada audytowalność decyzji, gating oraz minimalizację danych wrażliwych — szczegóły zależą od wdrożenia.",
-
-    contactTitle: "Kontakt",
-    contactP: "Pisz bezpośrednio:",
-    contactEmail1Label: "antoni.czyz@outlook.com",
-    contactEmail2Label: "support@reconica.dev",
-
-    footer: "© Reconica • HRP / MIND_OS research landing",
-    langToggle: "EN",
+    docTitle: "HRP — Homeostatic Regulation Protocol (MIND_OS)",
+    nav: {
+      overview: "Przegląd",
+      architecture: "Architektura",
+      notes: "Ciekawostki",
+      experiments: "Ewaluacja",
+      refs: "Implementacje",
+      docs: "Dokumenty",
+      contact: "Kontakt",
+      lang: "EN",
+    },
+    hero: {
+      kTag: "MIND_OS • V.E.S.P.E.R. • HRP",
+      h1a: "Homeostatic",
+      h1b: "Regulation Protocol",
+      lead:
+        "HRP to warstwa regulacji wewnętrznej agenta — zarządza stanem, popędami (drives) i kosztem poznawczym. To nie jest kolejny protokół komunikacji. To „układ autonomiczny” dla długotrwałych instancji.",
+      ctaPrimary: "Czytaj whitepaper",
+      ctaSecondary: "Zobacz architekturę",
+      badges: [
+        "homeostaza i stabilność",
+        "metabolizm poznawczy",
+        "warstwowa decyzyjność",
+        "pamięć + konsolidacja (sen)",
+      ],
+    },
+    abstract: {
+      h: "Abstrakt",
+      p1:
+        "W praktycznych systemach agentowych problemem nie jest brak narzędzi, tylko brak wewnętrznej stabilizacji: dryf narracji, nadmierne użycie narzędzi, lock‑in motywacyjny i wahania trybu pracy.",
+      p2:
+        "HRP opisuje mechanikę homeostazy poznawczej: bodźce → appraisal → aktualizacja stanu (PAD) i popędów → router decyzji (heurystyka / refleksja / meta‑kontrola) → pamięć epizodyczna → konsolidacja narracyjna. Celem jest spójność działania w czasie, przy kontrolowanym koszcie.",
+    },
+    contributions: {
+      h: "Najważniejsze wkłady",
+      items: [
+        {
+          t: "Regulacja stanu wewnętrznego",
+          d: "Zdefiniowany cykl homeostazy: baseline, decay, inercja oraz wpływ bodźców na stan PAD.",
+        },
+        {
+          t: "Drives i priorytetyzacja",
+          d: "Dynamiczne popędy motywacyjne, konflikt i arbitraż — zamiast stałych „celów w promptach”.",
+        },
+        {
+          t: "Cognitive metabolism",
+          d: "Budżet poznawczy i koszt akcji: agent nie odpala „ciała” (narzędzi) bez potrzeby.",
+        },
+        {
+          t: "Pamięć i „sleep”",
+          d: "Episody → narracja → aktualizacja modelu JA: spójność długich sesji bez trenowania LLM.",
+        },
+      ],
+    },
+    positioning: {
+      h: "Pozycjonowanie względem MCP / ACP / A2A",
+      p:
+        "MCP/ACP/A2A porządkują kontekst i komunikację. HRP reguluje wnętrze instancji: kiedy działać, jak reagować i jak wracać do stabilnego baseline.",
+      table: {
+        col1: "Obszar",
+        col2: "MCP / ACP / A2A",
+        col3: "HRP",
+        rows: [
+          ["Cel", "kontekst + współpraca", "stan wewnętrzny + drives"],
+          ["Ryzyko", "chaos narzędzi / integracji", "dryf, lock‑in, przeciążenie poznawcze"],
+          ["Mechanika", "protokół komunikacji", "bio‑inspirowana pętla sprzężenia"],
+          ["Korzyść", "interoperacyjność", "długotrwała stabilność i autonomia"],
+        ],
+      },
+    },
+    architecture: {
+      h: "Architektura w skrócie",
+      sub1: "1) Tick loop (życie instancji)",
+      sub2: "2) Gdzie HRP „siedzi” w stosie",
+      note:
+        "Diagramy są uproszczone — pokazują przepływ kontroli i decyzji, nie detale implementacyjne.",
+    },
+    notes: {
+      h: "Ciekawostki (dla ludzi technicznych)",
+      items: [
+        {
+          t: "Appraisal to nie „emocje” — to funkcja znaczenia",
+          d: "Ten sam bodziec może wywołać inną reakcję w zależności od aktywnych drive’ów i historii epizodów.",
+        },
+        {
+          t: "Meta‑kontrola przełącza tryb myślenia",
+          d: "Heurystyki w prostych sytuacjach, refleksja przy niepewności, safety‑gate przy ryzyku.",
+        },
+        {
+          t: "Lock‑in motywacyjny da się mierzyć",
+          d: "Jeśli jeden drive dominuje zbyt długo, spada adaptacja i rośnie koszt — HRP to wygasza.",
+        },
+        {
+          t: "Provenance ≠ storytelling",
+          d: "Episody zapisują „ślad” stanu i źródeł; narracja to konsolidacja, nie konfabulacja.",
+        },
+      ],
+    },
+    experiments: {
+      h: "Ewaluacja (propozycje metryk)",
+      p:
+        "Poniżej zestaw metryk, które dobrze oddają, czy HRP realnie stabilizuje agenta. To „laboratory‑friendly” checklist na iteracje.",
+      items: [
+        {
+          t: "Stability / drift",
+          d: "spójność odpowiedzi, powrót do baseline, odporność na szum bodźców",
+        },
+        {
+          t: "Tool‑economy",
+          d: "liczba wywołań narzędzi, czas w trybie „ciało”, koszt na zadanie",
+        },
+        {
+          t: "Safety gating",
+          d: "odsetek blokad, fałszywe pozytywy/negatywy, czas reakcji",
+        },
+        {
+          t: "Narrative coherence",
+          d: "zgodność autobiografii, stabilność preferencji, kontrola halucynacji",
+        },
+      ],
+    },
+    refs: {
+      h: "Reference implementations (nie „reklama aplikacji”)",
+      p:
+        "Poniższe systemy traktujemy jako poligon wdrożeniowy do testów HRP — pokazują różne profile obciążenia i ryzyka.",
+      cards: [
+        {
+          t: "V.E.S.P.E.R.",
+          d: "Środowisko narzędziowe (tooling‑heavy): HRP steruje kosztem akcji i decyzją „czy odpalać ciało”.",
+        },
+        {
+          t: "R.O.I.",
+          d: "Środowisko operacyjne: priorytetyzacja, telemetria i kontrola dostępu w warunkach szumu informacyjnego.",
+        },
+        {
+          t: "SARA",
+          d: "Asystent długiej interakcji: spójność narracji, pamięć i stabilność zachowania w czasie.",
+        },
+      ],
+    },
+    docs: {
+      h: "Dokumenty",
+      p:
+        "Materiały referencyjne w formie PDF — wprost do cytowania i przeglądu.",
+      mind: "MIND_OS / HRP — whitepaper (EN)",
+      dtr: "V.E.S.P.E.R. — DTR (PL)",
+      videoH: "Wideo",
+      videoP:
+        "Film jako materiał koncepcyjny. Dla prywatności: bez osadzania YouTube, tylko link.",
+      videoBtn: "Otwórz na YouTube",
+      reg: "Regulamin",
+    },
+    contact: {
+      h: "Kontakt",
+      p:
+        "Dwa kanały kontaktu, zależnie od tematu. Odpowiadamy selektywnie, ale konkretnie.",
+      bizH: "Biznes / współpraca",
+      bizD: "Partnerstwa, współpraca, inicjatywy komercyjne.",
+      bizMail: "p.oleksiak@osintownia.pl",
+      techH: "Techniczno‑badawcze",
+      techD: "HRP, MIND_OS, architektura, eksperymenty i dokumentacja.",
+      techMail: "antoni.czyz@outlook.com",
+      li: "Profil na LinkedIn",
+      footer:
+        "© " + new Date().getFullYear() + " Reconica • HRP / MIND_OS",
+    },
   },
-
   en: {
-    navAbstract: "Abstract",
-    navContrib: "Contributions",
-    navArchitecture: "Architecture",
-    navExperiments: "Experiments",
-    navImplementations: "Implementations",
-    navDocs: "Docs",
-    navContact: "Contact",
-
-    topBadge: "HRP / MIND_OS • cognitive agent architecture",
-    heroTitle: "Homeostatic Regulation Protocol",
-    heroSubtitle:
-      "An internal regulation layer for agents: homeostasis, drives, cognitive metabolism, and memory consolidation.",
-    heroP:
-      "HRP is positioned alongside tool/communication protocols (MCP/ACP/A2A): instead of moving context, it targets behavioral stability, action cost, and long-horizon autonomy.",
-    ctaPrimary: "Read the whitepaper",
-    ctaSecondary: "View architecture",
-
-    abstractTitle: "Abstract",
-    abstractP1:
-      "In real agent deployments, instability rarely comes from “missing prompt tricks”. More often it’s the absence of a state regulator: cognitive costs, priorities, drives, and tension decay.",
-    abstractP2:
-      "HRP introduces an internal regulation loop that controls decision-mode switching, energy/attention budgets, and the consolidation of episodic memory into a narrative (“system sleep”).",
-
-    contribTitle: "Key contributions",
-    contrib1Title: "HRP ≠ a communication protocol",
-    contrib1P:
-      "MCP/ACP/A2A primarily address context transport and inter-agent collaboration. HRP regulates the agent’s internal “why/when/how” — inside the instance.",
-    contrib2Title: "Cognitive metabolism",
-    contrib2P:
-      "The agent has an energy budget (attention/load). High cost triggers reflection; low cost uses heuristics. The “body” (tool actions) runs only when it’s worth it.",
-    contrib3Title: "Homeostasis & decay",
-    contrib3P:
-      "States (e.g., PAD) and drives have inertia, decay, and a return-to-baseline — stabilizing behavior without rigid prompt discipline.",
-    contrib4Title: "Narrative consolidation",
-    contrib4P:
-      "A system “sleep” pipeline consolidates episodes into an autobiography and self-model, reducing drift and improving long-session coherence.",
-
-    archTitle: "Where HRP sits in the agent stack",
-    archLead:
-      "HRP runs inside the instance. Protocols like MCP/ACP/A2A sit around the agent — connecting tools, context, and collaboration.",
-    archCard1Title: "Outside (tooling / collaboration)",
-    archCard1Bullets: ["MCP / ACP / A2A", "Context, tools, channels", "Interoperability"],
-    archCard2Title: "Inside (regulation / autonomy)",
-    archCard2Bullets: ["HRP", "Homeostasis + drives + PAD", "Decision router + budgets", "Sleep / consolidation"],
-
-    curiosTitle: "Research notes (quick facts)",
-    curios1: "Same stimulus ≠ same outcome: appraisal depends on episodic history and active drives.",
-    curios2: "A common failure mode is “over-tooling”: HRP reduces unnecessary tool actions.",
-    curios3: "Narrative drift is not just memory — it’s missing decay and consolidation.",
-    curios4: "The cheapest quality win is often meta-control (when to reflect), not longer prompts.",
-
-    expTitle: "Experiments & metrics",
-    expLead:
-      "A research landing should show metrics, not promises. Below is a practical validation set for HRP.",
-    exp1Title: "Long-session stability",
-    exp1P: "Behavior drift vs return-to-baseline (N=300–2000 turns).",
-    exp2Title: "Tooling & decision cost",
-    exp2P: "Tool-call count per objective unit while preserving quality.",
-    exp3Title: "Noise robustness",
-    exp3P: "Appraisal filtering keeps priorities without escalating cost.",
-    exp4Title: "Safety gating",
-    exp4P: "Safety gate blocks high-risk actions with minimal utility loss.",
-
-    implTitle: "Reference implementations",
-    implLead:
-      "Apps are not “the product” here — they are field reference implementations that generate evidence and validate HRP.",
-    impl1Title: "R.O.I.",
-    impl1P: "Operational environment where action cost and strict prioritization matter.",
-    impl2Title: "S.A.R.A.",
-    impl2P: "Continuous assistant — focus on narrative stability, coherence, and consolidation.",
-    impl3Title: "V.E.S.P.E.R.",
-    impl3P: "Tooling-heavy system — ideal for studying meta-control and reducing over-tooling.",
-
-    docsTitle: "Docs",
-    docsLead:
-      "Public technical materials (PDF). If you publish newer versions — replace files in /public/docs.",
-    docs1Title: "MIND_OS / HRP Whitepaper",
-    docs1P: "V.E.S.P.E.R. Alpha 2.0 — MIND_OS Cognitive Architecture (v3.1).",
-    docs2Title: "V.E.S.P.E.R. DTR",
-    docs2P: "Technical documentation (DTR) v1.2 (scientific, FULL).",
-
-    videoTitle: "Talk / Demo",
-    videoLead:
-      "A video artifact: conceptual and narrative framing for HRP/MIND_OS.",
-    videoBullets: [
-      "Motivation: why context protocols alone are not enough",
-      "Homeostasis, drives, and cognitive cost",
-      "How HRP relates to MCP/ACP/A2A",
-    ],
-    videoButton: "Open on YouTube",
-
-    ethicsTitle: "Limitations & safety",
-    ethicsP:
-      "HRP is a regulation layer and does not replace safety policies, tool verification, or legal compliance. The project assumes auditability, gating, and minimization of sensitive data — specifics depend on deployment.",
-
-    contactTitle: "Contact",
-    contactP: "Reach out:",
-    contactEmail1Label: "antoni.czyz@outlook.com",
-    contactEmail2Label: "support@reconica.dev",
-
-    footer: "© Reconica • HRP / MIND_OS research landing",
-    langToggle: "PL",
+    docTitle: "HRP — Homeostatic Regulation Protocol (MIND_OS)",
+    nav: {
+      overview: "Overview",
+      architecture: "Architecture",
+      notes: "Notes",
+      experiments: "Evaluation",
+      refs: "Implementations",
+      docs: "Docs",
+      contact: "Contact",
+      lang: "PL",
+    },
+    hero: {
+      kTag: "MIND_OS • V.E.S.P.E.R. • HRP",
+      h1a: "Homeostatic",
+      h1b: "Regulation Protocol",
+      lead:
+        "HRP is an internal regulation layer for agents — it manages state, drives, and cognitive cost. It is not a communication protocol. Think of it as an “autonomic system” for long‑running entities.",
+      ctaPrimary: "Read the whitepaper",
+      ctaSecondary: "See the architecture",
+      badges: [
+        "homeostasis & stability",
+        "metabolizm poznawczy",
+        "layered decision making",
+        "memory + consolidation (sleep)",
+      ],
+    },
+    abstract: {
+      h: "Abstract",
+      p1:
+        "In real agent systems, the core problem is not missing tools — it’s missing internal stabilization: narrative drift, tool overuse, motivational lock‑in, and oscillating control modes.",
+      p2:
+        "HRP describes cognitive homeostasis mechanics: stimuli → appraisal → state (PAD) and drives update → decision router (heuristics / reflection / meta‑control) → episodic memory → narrative consolidation. The goal is long‑term coherence at a controlled cost.",
+    },
+    contributions: {
+      h: "Key contributions",
+      items: [
+        {
+          t: "Internal state regulation",
+          d: "A defined homeostatic cycle: baseline, decay, inertia, and PAD dynamics driven by appraisal.",
+        },
+        {
+          t: "Drives & arbitration",
+          d: "Dynamic motivational drives and conflict resolution — not static “goals in prompts”.",
+        },
+        {
+          t: "Cognitive metabolism",
+          d: "Cognitive budget and action cost: the agent should not invoke the “body” (tools) unnecessarily.",
+        },
+        {
+          t: "Memory & “sleep”",
+          d: "Episodes → narrative → self‑model updates: long‑session coherence without retraining the LLM.",
+        },
+      ],
+    },
+    positioning: {
+      h: "Positioning vs MCP / ACP / A2A",
+      p:
+        "MCP/ACP/A2A standardize context and inter‑agent communication. HRP regulates the inside of an instance: when to act, how to react, and how to return to a stable baseline.",
+      table: {
+        col1: "Scope",
+        col2: "MCP / ACP / A2A",
+        col3: "HRP",
+        rows: [
+          ["Goal", "context + collaboration", "internal state + drives"],
+          ["Main failure modes", "tool/integration chaos", "drift, lock‑in, cognitive overload"],
+          ["Mechanics", "communication protocol", "biomimetic feedback loop"],
+          ["Benefit", "interoperability", "long‑run stability and autonomy"],
+        ],
+      },
+    },
+    architecture: {
+      h: "Architecture at a glance",
+      sub1: "1) Tick loop (instance life cycle)",
+      sub2: "2) Where HRP sits in the stack",
+      note:
+        "Diagrams are simplified — they show control flow and decision routing, not implementation details.",
+    },
+    notes: {
+      h: "Research notes (quick facts)",
+      items: [
+        {
+          t: "Appraisal is not “emotion” — it’s a meaning function",
+          d: "The same stimulus can yield different reactions depending on active drives and episodic history.",
+        },
+        {
+          t: "Meta‑control switches cognition modes",
+          d: "Heuristics for easy cases, reflection under uncertainty, safety‑gate under risk.",
+        },
+        {
+          t: "Motivational lock‑in is measurable",
+          d: "If one drive dominates too long, adaptation drops and cost rises — HRP dampens it.",
+        },
+        {
+          t: "Provenance ≠ storytelling",
+          d: "Episodes store state traces and sources; narrative is consolidation, not confabulation.",
+        },
+      ],
+    },
+    experiments: {
+      h: "Evaluation (metric proposals)",
+      p:
+        "A compact metric set that reveals whether HRP actually stabilizes an agent — a lab‑friendly checklist for iteration.",
+      items: [
+        { t: "Stability / drift", d: "coherence, baseline return, robustness to noisy inputs" },
+        { t: "Tool‑economy", d: "tool calls, time in “body mode”, cost per task" },
+        { t: "Safety gating", d: "block rate, false positives/negatives, response time" },
+        { t: "Narrative coherence", d: "autobiography consistency, preference stability, hallucination control" },
+      ],
+    },
+    refs: {
+      h: "Reference implementations (not product marketing)",
+      p:
+        "These systems act as deployment sandboxes for HRP — each represents a different risk and workload profile.",
+      cards: [
+        { t: "V.E.S.P.E.R.", d: "Tooling‑heavy environment: HRP controls action cost and “should we invoke the body?”." },
+        { t: "R.O.I.", d: "Operational environment: prioritization, telemetry, access control under information noise." },
+        { t: "SARA", d: "Long interaction assistant: narrative coherence, memory, long‑run behavioral stability." },
+      ],
+    },
+    docs: {
+      h: "Documents",
+      p: "PDF references — ready to read, cite, and discuss.",
+      mind: "MIND_OS / HRP — whitepaper (EN)",
+      dtr: "V.E.S.P.E.R. — DTR (PL)",
+      videoH: "Video",
+      videoP: "A conceptual talk. For privacy: no YouTube embed — link only.",
+      videoBtn: "Open on YouTube",
+      reg: "Terms",
+    },
+    contact: {
+      h: "Contact",
+      p:
+        "Two channels, depending on the topic. We respond selectively, but with substance.",
+      bizH: "Business / collaboration",
+      bizD: "Partnerships, collaboration, commercial initiatives.",
+      bizMail: "p.oleksiak@osintownia.pl",
+      techH: "Technical / research",
+      techD: "HRP, MIND_OS, architecture, experiments, documentation.",
+      techMail: "antoni.czyz@outlook.com",
+      li: "LinkedIn profile",
+      footer:
+        "© " + new Date().getFullYear() + " Reconica • HRP / MIND_OS",
+    },
   },
 };
 
-function cn(...xs) {
-  return xs.filter(Boolean).join(" ");
-}
-
-function Section({ id, eyebrow, title, children }) {
+function Section({ id, title, children, kicker }) {
   return (
-    <section id={id} className="scroll-mt-28 py-16 md:py-20">
-      <div className="max-w-6xl mx-auto px-5">
-        {eyebrow ? (
-          <p className="text-xs uppercase tracking-[0.22em] text-white/50">
-            {eyebrow}
-          </p>
-        ) : null}
-        <h2 className="mt-3 text-2xl md:text-3xl font-semibold tracking-tight">
-          {title}
-        </h2>
-        <div className="mt-6">{children}</div>
+    <section id={id} className="scroll-mt-28">
+      <div className="mx-auto max-w-6xl px-6 py-14">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.25 }}
+          transition={{ duration: 0.5 }}
+        >
+          {kicker && (
+            <div className="mb-3 text-xs tracking-[0.2em] text-white/50">
+              {kicker}
+            </div>
+          )}
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white">
+            {title}
+          </h2>
+          <div className="mt-6">{children}</div>
+        </motion.div>
       </div>
     </section>
   );
 }
 
-function Card({ title, children, className }) {
+function SoftCard({ title, desc, icon }) {
   return (
-    <div
-      className={cn(
-        "rounded-2xl bg-white/5 border border-white/10 p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.02)]",
-        className
-      )}
-    >
-      <h3 className="text-base font-semibold">{title}</h3>
-      <div className="mt-3 text-sm leading-relaxed text-white/80">
-        {children}
+    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.04)] backdrop-blur">
+      <div className="flex items-start gap-4">
+        <div className="mt-1 h-9 w-9 rounded-xl border border-white/10 bg-white/[0.04] grid place-items-center text-white/80">
+          {icon}
+        </div>
+        <div>
+          <div className="text-base font-semibold text-white">{title}</div>
+          <div className="mt-2 text-sm leading-relaxed text-white/70">
+            {desc}
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
-function BulletList({ items }) {
+function Pill({ children }) {
   return (
-    <ul className="mt-3 space-y-2 text-sm text-white/80">
-      {items.map((x) => (
-        <li key={x} className="flex gap-3">
-          <span className="mt-[0.38rem] h-1.5 w-1.5 rounded-full bg-white/60 shrink-0" />
-          <span>{x}</span>
-        </li>
-      ))}
-    </ul>
+    <span className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-white/70">
+      {children}
+    </span>
   );
 }
 
-function StackDiagram({ t }) {
+
+function DiagramTick({ lang }) {
+  const L =
+    lang === "pl"
+      ? { title: "PĘTLA TICK", boxes: ["BODŹCE", "APPRAISAL", "STAN + DRIVES", "ROUTER DECYZJI", "AKCJA"], loop: "SPRZĘŻENIE / PAMIĘĆ" }
+      : { title: "TICK LOOP", boxes: ["SENSE", "APPRAISAL", "STATE + DRIVES", "DECISION ROUTER", "ACTION"], loop: "FEEDBACK / MEMORY" };
+
   return (
-    <div className="rounded-2xl bg-white/5 border border-white/10 p-6 overflow-hidden">
-      <div className="grid md:grid-cols-2 gap-5">
-        <div className="rounded-2xl bg-black/25 border border-white/10 p-5">
-          <div className="text-xs uppercase tracking-[0.22em] text-white/50">
-            {t.archCard1Title}
-          </div>
-          <BulletList items={t.archCard1Bullets} />
-        </div>
-
-        <div className="rounded-2xl bg-black/25 border border-white/10 p-5">
-          <div className="text-xs uppercase tracking-[0.22em] text-white/50">
-            {t.archCard2Title}
-          </div>
-          <BulletList items={t.archCard2Bullets} />
-        </div>
+    <div className="rounded-2xl border border-white/10 bg-black/40 p-5 overflow-hidden">
+      <div className="text-xs tracking-[0.2em] text-white/50 mb-3">
+        {L.title}
       </div>
+      <svg viewBox="0 0 920 220" className="w-full h-auto">
+        <defs>
+          <linearGradient id="g1" x1="0" x2="1">
+            <stop offset="0" stopColor="rgba(255,255,255,0.18)" />
+            <stop offset="1" stopColor="rgba(255,255,255,0.04)" />
+          </linearGradient>
+        </defs>
+        {[
+          { x: 30, y: 70, w: 140, h: 70, t: L.boxes[0] },
+          { x: 200, y: 70, w: 160, h: 70, t: L.boxes[1] },
+          { x: 390, y: 70, w: 170, h: 70, t: L.boxes[2] },
+          { x: 590, y: 70, w: 160, h: 70, t: L.boxes[3] },
+          { x: 780, y: 70, w: 110, h: 70, t: L.boxes[4] },
+        ].map((b, i) => (
+          <g key={i}>
+            <rect
+              x={b.x}
+              y={b.y}
+              width={b.w}
+              height={b.h}
+              rx="16"
+              fill="url(#g1)"
+              stroke="rgba(255,255,255,0.14)"
+            />
+            <text
+              x={b.x + b.w / 2}
+              y={b.y + b.h / 2 + 6}
+              fill="rgba(255,255,255,0.9)"
+              fontSize="14"
+              textAnchor="middle"
+              fontFamily="ui-sans-serif, system-ui"
+              letterSpacing="2"
+            >
+              {b.t}
+            </text>
+          </g>
+        ))}
+        {[170, 360, 560, 750].map((x, i) => (
+          <g key={i}>
+            <line
+              x1={x}
+              y1={105}
+              x2={x + 30}
+              y2={105}
+              stroke="rgba(255,255,255,0.28)"
+              strokeWidth="2"
+            />
+            <polygon
+              points={`${x + 30},105 ${x + 22},99 ${x + 22},111`}
+              fill="rgba(255,255,255,0.28)"
+            />
+          </g>
+        ))}
+        <path
+          d="M 835 70 C 850 35, 880 35, 895 70"
+          stroke="rgba(255,255,255,0.22)"
+          strokeWidth="2"
+          fill="none"
+        />
+        <path
+          d="M 895 70 C 910 105, 910 140, 895 175"
+          stroke="rgba(255,255,255,0.22)"
+          strokeWidth="2"
+          fill="none"
+        />
+        <path
+          d="M 895 175 C 880 210, 850 210, 835 175"
+          stroke="rgba(255,255,255,0.22)"
+          strokeWidth="2"
+          fill="none"
+        />
+        <path
+          d="M 835 175 C 820 140, 820 105, 835 70"
+          stroke="rgba(255,255,255,0.22)"
+          strokeWidth="2"
+          fill="none"
+        />
+        <text
+          x="865"
+          y="205"
+          fill="rgba(255,255,255,0.45)"
+          fontSize="11"
+          textAnchor="middle"
+          fontFamily="ui-sans-serif, system-ui"
+        >
+          {L.loop}
+        </text>
+      </svg>
+    </div>
+  );
+}
+function DiagramStack({ lang }) {
+  const labels =
+    lang === "pl"
+      ? ["Użytkownik / środowisko", "MCP / ACP / A2A", "Narzędzia / usługi", "HRP (wewnątrz instancji)", "Model (LLM)"]
+      : ["User / environment", "MCP / ACP / A2A", "Tools / services", "HRP (inside instance)", "Model (LLM)"];
 
-      <div className="mt-6">
-        <div className="rounded-2xl bg-black/25 border border-white/10 p-5">
-          <div className="text-xs uppercase tracking-[0.22em] text-white/50">
-            HRP Core Loop (concept)
+  return (
+    <div className="rounded-2xl border border-white/10 bg-black/40 p-5 overflow-hidden">
+      <div className="text-xs tracking-[0.2em] text-white/50 mb-3">
+        STACK
+      </div>
+      <div className="grid gap-3">
+        {[0, 1, 2, 3, 4].map((i) => (
+          <div
+            key={i}
+            className={
+              "rounded-xl border border-white/10 px-4 py-3 flex items-center justify-between " +
+              (i === 3 ? "bg-white/[0.06]" : "bg-white/[0.03]")
+            }
+          >
+            <div className="text-sm text-white/85 font-medium">{labels[i]}</div>
+            {i === 3 && (
+              <span className="text-xs text-white/60">
+                PAD • drives • router • memory • sleep
+              </span>
+            )}
           </div>
-
-          {/* lightweight inline diagram */}
-          <div className="mt-4 grid md:grid-cols-5 gap-3 text-xs">
-            {["SENSE", "APPRAISE", "STATE", "DECIDE", "ACT/MEM"].map((step) => (
-              <div
-                key={step}
-                className="rounded-xl bg-white/5 border border-white/10 px-3 py-3 text-center text-white/80"
-              >
-                {step}
-              </div>
-            ))}
-          </div>
-
-          <p className="mt-4 text-sm text-white/70 leading-relaxed">
-            Tick loop: perception/context → appraisal → homeostatic update
-            (drives/PAD/decay) → decision router (heuristic vs reflective) →
-            tool action + memory write.
-          </p>
-        </div>
+        ))}
       </div>
     </div>
   );
 }
 
 export default function App() {
-  const [lang, setLang] = useState("en");
+  const [lang, setLang] = useState("pl");
+  const t = copy[lang];
 
   useEffect(() => {
-    const stored = localStorage.getItem("reconica_lang");
-    if (stored === "pl" || stored === "en") setLang(stored);
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved === "pl" || saved === "en") setLang(saved);
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("reconica_lang", lang);
-  }, [lang]);
+    localStorage.setItem(STORAGE_KEY, lang);
+    document.title = t.docTitle;
+  }, [lang, t.docTitle]);
 
-  const t = copy[lang];
+  const { scrollY } = useScroll();
+  const bgY = useTransform(scrollY, [0, 800], [0, 120]);
+  const glow = useTransform(scrollY, [0, 600], [0.85, 0.35]);
 
-  const nav = useMemo(
+  const nav = t.nav;
+
+  const navItems = useMemo(
     () => [
-      { id: "abstract", label: t.navAbstract },
-      { id: "contrib", label: t.navContrib },
-      { id: "architecture", label: t.navArchitecture },
-      { id: "experiments", label: t.navExperiments },
-      { id: "implementations", label: t.navImplementations },
-      { id: "docs", label: t.navDocs },
-      { id: "contact", label: t.navContact },
+      { id: "overview", label: nav.overview },
+      { id: "architecture", label: nav.architecture },
+      { id: "notes", label: nav.notes },
+      { id: "experiments", label: nav.experiments },
+      { id: "refs", label: nav.refs },
+      { id: "docs", label: nav.docs },
+      { id: "contact", label: nav.contact },
     ],
-    [t]
+    [nav]
   );
 
-  const { scrollYProgress } = useScroll();
-  const barX = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
-
-  const toggleLang = () => setLang((p) => (p === "pl" ? "en" : "pl"));
-
   return (
-    <div className="min-h-screen bg-[#070A12] text-white">
-      {/* Subtle background */}
-      <div className="pointer-events-none fixed inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(140,170,255,0.18),transparent_45%),radial-gradient(circle_at_80%_35%,rgba(255,255,255,0.08),transparent_40%),radial-gradient(circle_at_40%_90%,rgba(160,255,220,0.10),transparent_45%)]" />
-        <div className="absolute inset-0 opacity-[0.35] bg-[linear-gradient(to_bottom,rgba(0,0,0,0),rgba(0,0,0,0.25),rgba(0,0,0,0.6))]" />
-      </div>
+    <div className="min-h-screen bg-black text-white selection:bg-white/20 selection:text-white">
+      {/* background */}
+      <motion.div
+        style={{ y: bgY, opacity: glow }}
+        className="pointer-events-none fixed inset-0"
+      >
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.10),rgba(0,0,0,0.0)_55%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.06),rgba(0,0,0,0.0)_60%)]" />
+        <div className="absolute inset-0 opacity-[0.06] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:72px_72px]" />
+      </motion.div>
 
-      {/* Top progress bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 h-[2px] bg-white/10">
-        <motion.div className="h-full bg-white/70" style={{ width: barX }} />
-      </div>
-
-      {/* Header */}
-      <header className="sticky top-0 z-40 backdrop-blur bg-black/30 border-b border-white/10">
-        <div className="max-w-6xl mx-auto px-5 py-4 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
+      {/* nav */}
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-black/60 backdrop-blur">
+        <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between gap-4">
+          <a href="#overview" className="flex items-center gap-3">
             <img
-              src={LOGO_SRC}
+              src={hrpLogo}
               alt="HRP"
-              className="h-9 w-9 rounded-xl object-cover border border-white/10"
+              className="h-9 w-9 rounded-lg object-contain"
             />
             <div className="leading-tight">
-              <div className="text-sm font-semibold">Reconica</div>
-              <div className="text-xs text-white/60">{t.topBadge}</div>
+              <div className="text-sm font-semibold tracking-wide">HRP</div>
+              <div className="text-[11px] text-white/55">
+                Homeostatic Regulation Protocol
+              </div>
             </div>
-          </div>
+          </a>
 
-          <nav className="hidden lg:flex items-center gap-5 text-sm text-white/70">
-            {nav.map((x) => (
+          <nav className="hidden lg:flex items-center gap-6 text-sm text-white/70">
+            {navItems.map((it) => (
               <a
-                key={x.id}
-                href={`#${x.id}`}
+                key={it.id}
+                href={`#${it.id}`}
                 className="hover:text-white transition-colors"
               >
-                {x.label}
+                {it.label}
               </a>
             ))}
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <button
-              onClick={toggleLang}
-              className="rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs text-white/80 hover:bg-white/10 transition"
+              onClick={() => setLang((v) => (v === "pl" ? "en" : "pl"))}
+              className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-xs text-white/80 hover:bg-white/[0.06] transition"
               aria-label="Toggle language"
+              title="Toggle language"
             >
-              {t.langToggle}
+              {nav.lang}
             </button>
             <a
-              href="#docs"
-              className="rounded-xl bg-white text-black px-3 py-2 text-xs font-semibold hover:opacity-90 transition"
+              href={DOCS.mindOs}
+              className="rounded-xl bg-white text-black px-4 py-2 text-xs font-semibold hover:opacity-90 transition"
+              target="_blank"
+              rel="noreferrer"
             >
-              {t.navDocs}
+              {lang === "pl" ? "PDF" : "PDF"}
             </a>
           </div>
         </div>
       </header>
 
-      {/* Hero */}
-      <main className="relative">
-        <section className="pt-16 md:pt-20 pb-10">
-          <div className="max-w-6xl mx-auto px-5">
-            <div className="grid md:grid-cols-[1.2fr_0.8fr] gap-10 items-center">
-              <div>
-                <p className="text-xs uppercase tracking-[0.22em] text-white/55">
-                  {t.topBadge}
-                </p>
-                <h1 className="mt-4 text-4xl md:text-5xl font-semibold tracking-tight">
-                  {t.heroTitle}
-                </h1>
-                <p className="mt-4 text-base md:text-lg text-white/75 leading-relaxed">
-                  {t.heroSubtitle}
-                </p>
-                <p className="mt-5 text-sm md:text-base text-white/70 leading-relaxed max-w-2xl">
-                  {t.heroP}
-                </p>
-
-                <div className="mt-7 flex flex-wrap gap-3">
-                  <a
-                    href={DOCS.mindOs}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="rounded-xl bg-white text-black px-5 py-3 text-sm font-semibold hover:opacity-90 transition"
-                  >
-                    {t.ctaPrimary}
-                  </a>
-                  <a
-                    href="#architecture"
-                    className="rounded-xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-white/90 hover:bg-white/10 transition"
-                  >
-                    {t.ctaSecondary}
-                  </a>
-                </div>
+      {/* hero */}
+      <section id="overview" className="relative scroll-mt-28">
+        <div className="mx-auto max-w-7xl px-6 pt-14 pb-10">
+          <div className="grid lg:grid-cols-12 gap-10 items-center">
+            <motion.div
+              className="lg:col-span-7"
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <div className="text-xs tracking-[0.25em] text-white/55">
+                {t.hero.kTag}
               </div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="rounded-3xl bg-white/5 border border-white/10 p-6"
-              >
-                <div className="text-xs uppercase tracking-[0.22em] text-white/55">
-                  HRP at a glance
-                </div>
-                <div className="mt-5 space-y-4 text-sm text-white/80">
-                  <div className="flex items-start gap-3">
-                    <span className="mt-1 h-2 w-2 rounded-full bg-white/70" />
-                    <span>Homeostasis (baseline, decay, stability)</span>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <span className="mt-1 h-2 w-2 rounded-full bg-white/70" />
-                    <span>Drives + PAD-style state representation</span>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <span className="mt-1 h-2 w-2 rounded-full bg-white/70" />
-                    <span>Decision router (heuristics ↔ reflection)</span>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <span className="mt-1 h-2 w-2 rounded-full bg-white/70" />
-                    <span>System sleep (episodic → narrative)</span>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-          </div>
-        </section>
+              <h1 className="mt-4 text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight">
+                <span className="text-white">{t.hero.h1a}</span>{" "}
+                <span className="text-white/70">{t.hero.h1b}</span>
+              </h1>
 
-        {/* Abstract */}
-        <Section id="abstract" title={t.abstractTitle}>
-          <div className="grid md:grid-cols-2 gap-6">
-            <Card title={t.abstractTitle}>
-              <p>{t.abstractP1}</p>
-              <p className="mt-3">{t.abstractP2}</p>
-            </Card>
-            <Card title={t.ethicsTitle}>
-              <p>{t.ethicsP}</p>
-              <p className="mt-4 text-xs text-white/60">
-                Note: this landing is intentionally research-first (no autoplay embeds, minimal tracking).
+              <p className="mt-6 text-base sm:text-lg leading-relaxed text-white/70 max-w-2xl">
+                {t.hero.lead}
               </p>
-            </Card>
-          </div>
-        </Section>
 
-        {/* Contributions */}
-        <Section id="contrib" title={t.contribTitle}>
-          <div className="grid md:grid-cols-2 gap-6">
-            <Card title={t.contrib1Title}>{t.contrib1P}</Card>
-            <Card title={t.contrib2Title}>{t.contrib2P}</Card>
-            <Card title={t.contrib3Title}>{t.contrib3P}</Card>
-            <Card title={t.contrib4Title}>{t.contrib4P}</Card>
-          </div>
-        </Section>
-
-        {/* Architecture */}
-        <Section id="architecture" title={t.archTitle}>
-          <p className="text-sm md:text-base text-white/70 leading-relaxed max-w-3xl">
-            {t.archLead}
-          </p>
-          <div className="mt-6">
-            <StackDiagram t={t} />
-          </div>
-
-          <div className="mt-10">
-            <Card title={t.curiosTitle}>
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="text-sm text-white/80 leading-relaxed">{t.curios1}</div>
-                <div className="text-sm text-white/80 leading-relaxed">{t.curios2}</div>
-                <div className="text-sm text-white/80 leading-relaxed">{t.curios3}</div>
-                <div className="text-sm text-white/80 leading-relaxed">{t.curios4}</div>
+              <div className="mt-7 flex flex-wrap gap-3">
+                <a
+                  href={DOCS.mindOs}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-xl bg-white text-black px-5 py-3 text-sm font-semibold hover:opacity-90 transition"
+                >
+                  {t.hero.ctaPrimary}
+                </a>
+                <a
+                  href="#architecture"
+                  className="rounded-xl border border-white/12 bg-white/[0.03] px-5 py-3 text-sm font-semibold text-white/85 hover:bg-white/[0.06] transition"
+                >
+                  {t.hero.ctaSecondary}
+                </a>
               </div>
-            </Card>
-          </div>
-        </Section>
 
-        {/* Experiments */}
-        <Section id="experiments" title={t.expTitle}>
-          <p className="text-sm md:text-base text-white/70 leading-relaxed max-w-3xl">
-            {t.expLead}
-          </p>
-          <div className="mt-6 grid md:grid-cols-2 gap-6">
-            <Card title={t.exp1Title}>{t.exp1P}</Card>
-            <Card title={t.exp2Title}>{t.exp2P}</Card>
-            <Card title={t.exp3Title}>{t.exp3P}</Card>
-            <Card title={t.exp4Title}>{t.exp4P}</Card>
-          </div>
-        </Section>
+              <div className="mt-6 flex flex-wrap gap-2">
+                {t.hero.badges.map((b, i) => (
+                  <Pill key={i}>{b}</Pill>
+                ))}
+              </div>
+            </motion.div>
 
-        {/* Implementations */}
-        <Section id="implementations" title={t.implTitle}>
-          <p className="text-sm md:text-base text-white/70 leading-relaxed max-w-3xl">
-            {t.implLead}
-          </p>
-          <div className="mt-6 grid md:grid-cols-3 gap-6">
-            <Card title={t.impl1Title}>{t.impl1P}</Card>
-            <Card title={t.impl2Title}>{t.impl2P}</Card>
-            <Card title={t.impl3Title}>{t.impl3P}</Card>
-          </div>
-        </Section>
-
-        {/* Docs */}
-        <Section id="docs" title={t.docsTitle}>
-          <p className="text-sm md:text-base text-white/70 leading-relaxed max-w-3xl">
-            {t.docsLead}
-          </p>
-
-          <div className="mt-6 grid md:grid-cols-2 gap-6">
-            <Card title={t.docs1Title}>
-              <p>{t.docs1P}</p>
-              <a
-                href={DOCS.mindOs}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-4 inline-flex items-center justify-center rounded-xl bg-white text-black px-4 py-2 text-xs font-semibold hover:opacity-90 transition"
-              >
-                PDF
-              </a>
-            </Card>
-
-            <Card title={t.docs2Title}>
-              <p>{t.docs2P}</p>
-              <a
-                href={DOCS.dtr}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-4 inline-flex items-center justify-center rounded-xl bg-white text-black px-4 py-2 text-xs font-semibold hover:opacity-90 transition"
-              >
-                PDF
-              </a>
-            </Card>
-          </div>
-
-          <div className="mt-10">
-            <Card title={t.videoTitle}>
-              <p className="text-sm text-white/75">{t.videoLead}</p>
-              <div className="mt-4 grid md:grid-cols-[1fr_0.9fr] gap-6 items-start">
-                <div className="rounded-2xl bg-black/25 border border-white/10 p-5">
-                  <div className="text-xs uppercase tracking-[0.22em] text-white/55">
-                    {t.videoTitle}
+            <motion.div
+              className="lg:col-span-5"
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.1 }}
+            >
+              <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur shadow-[0_0_0_1px_rgba(255,255,255,0.04)]">
+                <div className="flex items-center justify-between">
+                  <div className="text-xs tracking-[0.25em] text-white/55">
+                    {lang === "pl" ? "SYGNAŁ HRP" : "HRP SIGNAL"}
                   </div>
-                  <BulletList items={t.videoBullets} />
-                  <a
-                    href={VIDEO.youtubeUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="mt-5 inline-flex items-center justify-center rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-xs font-semibold text-white/90 hover:bg-white/10 transition"
-                  >
-                    {t.videoButton}
-                  </a>
+                  <img
+                    src={hrpLogoGold}
+                    alt="HRP mark"
+                    className="h-8 w-8 object-contain opacity-90"
+                  />
                 </div>
 
-                <div className="rounded-2xl bg-black/25 border border-white/10 p-5">
-                  <div className="text-xs uppercase tracking-[0.22em] text-white/55">
-                    Embed policy
+                <motion.div
+                  className="mt-6 rounded-2xl border border-white/10 bg-black/40 p-5"
+                  initial={{ opacity: 0.0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true, amount: 0.4 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <div className="text-sm font-semibold text-white">
+                    {lang === "pl"
+                      ? "Co HRP robi w jednym zdaniu"
+                      : "HRP in one sentence"}
                   </div>
-                  <p className="mt-3 text-sm text-white/75 leading-relaxed">
-                    To keep the landing lightweight and privacy-friendly, the video is linked
-                    instead of autoplay-embedding YouTube. If you decide to embed, prefer lazy-load
-                    and “nocookie” mode.
+                  <p className="mt-2 text-sm leading-relaxed text-white/70">
+                    {lang === "pl"
+                      ? "Minimalizuje dryf i koszt, utrzymując spójne zachowanie agenta przez kontrolę stanu, popędów i trybu myślenia."
+                      : "It reduces drift and cost by keeping agent behavior coherent via state, drives, and cognition-mode control."}
                   </p>
+
+                  <div className="mt-4 grid grid-cols-2 gap-3 text-xs text-white/65">
+                    {(lang === "pl"
+                      ? ["PAD: baseline + wygaszanie", "drives: arbitraż", "meta‑kontrola", "epizody → narracja"]
+                      : ["PAD baseline + decay", "drives arbitration", "meta‑control", "episodic → narrative"]
+                    ).map((x) => (
+                      <div
+                        key={x}
+                        className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2"
+                      >
+                        {x}
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+
+                <div className="mt-6 text-xs text-white/55 leading-relaxed">
+                  {lang === "pl"
+                    ? "Uwaga: HRP to warstwa regulacji. Nie zastępuje protokołów komunikacji ani narzędzi — porządkuje ich użycie przez kontrolę wnętrza instancji."
+                    : "Note: HRP is a regulation layer. It does not replace communication protocols or tools — it disciplines their usage by controlling the inside of an instance."}
                 </div>
               </div>
-            </Card>
+            </motion.div>
           </div>
-        </Section>
+        </div>
+      </section>
 
-        {/* Contact */}
-        <Section id="contact" title={t.contactTitle}>
-          <Card title={t.contactTitle}>
-            <p className="text-sm text-white/75">{t.contactP}</p>
-            <div className="mt-4 flex flex-col gap-2 text-sm">
+      <Section id="abstract" title={t.abstract.h} kicker={lang==="pl" ? "PODSUMOWANIE" : "RESEARCH SUMMARY"}>
+        <div className="max-w-4xl text-white/75 leading-relaxed space-y-4">
+          <p>{t.abstract.p1}</p>
+          <p>{t.abstract.p2}</p>
+        </div>
+
+        <div className="mt-10 grid md:grid-cols-2 gap-4">
+          {t.contributions.items.map((it, i) => (
+            <SoftCard
+              key={i}
+              title={it.t}
+              desc={it.d}
+              icon={
+                <span className="text-sm font-semibold">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+              }
+            />
+          ))}
+        </div>
+      </Section>
+
+      <Section
+        id="positioning"
+        title={t.positioning.h}
+        kicker={lang==="pl" ? "POZYCJONOWANIE" : "STACK POSITIONING"}
+      >
+        <p className="max-w-4xl text-white/75 leading-relaxed">{t.positioning.p}</p>
+
+        <div className="mt-8 overflow-hidden rounded-2xl border border-white/10">
+          <div className="grid grid-cols-3 bg-white/[0.03] text-xs text-white/70">
+            <div className="px-4 py-3 border-r border-white/10">
+              {t.positioning.table.col1}
+            </div>
+            <div className="px-4 py-3 border-r border-white/10">
+              {t.positioning.table.col2}
+            </div>
+            <div className="px-4 py-3">{t.positioning.table.col3}</div>
+          </div>
+          {t.positioning.table.rows.map((r, i) => (
+            <div
+              key={i}
+              className="grid grid-cols-3 text-sm text-white/80 bg-black/30"
+            >
+              <div className="px-4 py-3 border-t border-r border-white/10">
+                {r[0]}
+              </div>
+              <div className="px-4 py-3 border-t border-r border-white/10 text-white/70">
+                {r[1]}
+              </div>
+              <div className="px-4 py-3 border-t border-white/10">
+                {r[2]}
+              </div>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      <Section id="architecture" title={t.architecture.h} kicker={lang==="pl" ? "DIAGRAMY" : "DIAGRAMS"}>
+        <div className="grid lg:grid-cols-2 gap-5">
+          <div>
+            <div className="text-sm font-semibold text-white mb-3">
+              {t.architecture.sub1}
+            </div>
+            <DiagramTick lang={lang} />
+          </div>
+          <div>
+            <div className="text-sm font-semibold text-white mb-3">
+              {t.architecture.sub2}
+            </div>
+            <DiagramStack lang={lang} />
+          </div>
+        </div>
+
+        <div className="mt-6 text-xs text-white/55">{t.architecture.note}</div>
+      </Section>
+
+      <Section id="notes" title={t.notes.h} kicker={lang==="pl" ? "NOTATKI" : "LAB NOTES"}>
+        <div className="grid md:grid-cols-2 gap-4">
+          {t.notes.items.map((it, i) => (
+            <SoftCard
+              key={i}
+              title={it.t}
+              desc={it.d}
+              icon={<span className="text-sm">✦</span>}
+            />
+          ))}
+        </div>
+      </Section>
+
+      <Section id="experiments" title={t.experiments.h} kicker={lang==="pl" ? "METRYKI" : "METRICS"}>
+        <p className="max-w-4xl text-white/75 leading-relaxed">{t.experiments.p}</p>
+        <div className="mt-8 grid md:grid-cols-2 gap-4">
+          {t.experiments.items.map((it, i) => (
+            <SoftCard
+              key={i}
+              title={it.t}
+              desc={it.d}
+              icon={<span className="text-sm font-semibold">M</span>}
+            />
+          ))}
+        </div>
+      </Section>
+
+      <Section id="refs" title={t.refs.h} kicker={lang==="pl" ? "WDROŻENIA" : "FIELD DEPLOYMENTS"}>
+        <p className="max-w-4xl text-white/75 leading-relaxed">{t.refs.p}</p>
+        <div className="mt-8 grid md:grid-cols-3 gap-4">
+          {t.refs.cards.map((c, i) => (
+            <div
+              key={i}
+              className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur shadow-[0_0_0_1px_rgba(255,255,255,0.04)]"
+            >
+              <div className="text-base font-semibold text-white">{c.t}</div>
+              <div className="mt-2 text-sm leading-relaxed text-white/70">
+                {c.d}
+              </div>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      <Section id="docs" title={t.docs.h} kicker={lang==="pl" ? "PDF / LINKI" : "PDF / LINKS"}>
+        <p className="max-w-4xl text-white/75 leading-relaxed">{t.docs.p}</p>
+
+        <div className="mt-8 grid md:grid-cols-2 gap-4">
+          <a
+            href={DOCS.mindOs}
+            target="_blank"
+            rel="noreferrer"
+            className="group rounded-2xl border border-white/10 bg-white/[0.03] p-6 hover:bg-white/[0.06] transition"
+          >
+            <div className="text-sm font-semibold text-white group-hover:text-white">
+              {t.docs.mind}
+            </div>
+            <div className="mt-2 text-xs text-white/60">
+              PDF • {lang === "pl" ? "otwórz w nowej karcie" : "open in new tab"}
+            </div>
+          </a>
+
+          <a
+            href={DOCS.vesperDtr}
+            target="_blank"
+            rel="noreferrer"
+            className="group rounded-2xl border border-white/10 bg-white/[0.03] p-6 hover:bg-white/[0.06] transition"
+          >
+            <div className="text-sm font-semibold text-white">
+              {t.docs.dtr}
+            </div>
+            <div className="mt-2 text-xs text-white/60">
+              PDF • {lang === "pl" ? "otwórz w nowej karcie" : "open in new tab"}
+            </div>
+          </a>
+        </div>
+
+        <div className="mt-10 rounded-2xl border border-white/10 bg-black/30 p-6">
+          <div className="text-base font-semibold text-white">{t.docs.videoH}</div>
+          <p className="mt-2 text-sm leading-relaxed text-white/70">
+            {t.docs.videoP}
+          </p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <a
+              href={YT_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-xl bg-white text-black px-5 py-3 text-sm font-semibold hover:opacity-90 transition"
+            >
+              {t.docs.videoBtn}
+            </a>
+            <a
+              href="/regulamin.html"
+              className="rounded-xl border border-white/12 bg-white/[0.03] px-5 py-3 text-sm font-semibold text-white/85 hover:bg-white/[0.06] transition"
+            >
+              {t.docs.reg}
+            </a>
+          </div>
+        </div>
+      </Section>
+
+      <Section id="contact" title={t.contact.h} kicker={lang==="pl" ? "KONTAKT" : "REACH OUT"}>
+        <p className="max-w-4xl text-white/75 leading-relaxed">{t.contact.p}</p>
+
+        <div className="mt-8 grid lg:grid-cols-2 gap-4">
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur">
+            <div className="text-base font-semibold text-white">{t.contact.bizH}</div>
+            <div className="mt-2 text-sm text-white/70">{t.contact.bizD}</div>
+            <a
+              href={`mailto:${t.contact.bizMail}`}
+              className="mt-4 inline-flex rounded-xl bg-white text-black px-4 py-2 text-sm font-semibold hover:opacity-90 transition"
+            >
+              {t.contact.bizMail}
+            </a>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur">
+            <div className="text-base font-semibold text-white">{t.contact.techH}</div>
+            <div className="mt-2 text-sm text-white/70">{t.contact.techD}</div>
+            <div className="mt-4 flex flex-wrap gap-3">
               <a
-                className="text-white/90 hover:text-white underline decoration-white/20 hover:decoration-white/50"
-                href="mailto:antoni.czyz@outlook.com"
+                href={`mailto:${t.contact.techMail}`}
+                className="inline-flex rounded-xl bg-white text-black px-4 py-2 text-sm font-semibold hover:opacity-90 transition"
               >
-                {t.contactEmail1Label}
+                {t.contact.techMail}
               </a>
               <a
-                className="text-white/90 hover:text-white underline decoration-white/20 hover:decoration-white/50"
-                href="mailto:support@reconica.dev"
+                href="https://www.linkedin.com/in/tony-czyz-575371ba/"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex rounded-xl border border-white/12 bg-white/[0.03] px-4 py-2 text-sm font-semibold text-white/85 hover:bg-white/[0.06] transition"
               >
-                {t.contactEmail2Label}
+                {t.contact.li}
               </a>
             </div>
-
-            <div className="mt-6 flex items-center gap-4 text-xs text-white/50">
-              <a className="hover:text-white/70" href="/regulamin.html">
-                {lang === "pl" ? "Regulamin" : "Terms"}
-              </a>
-              <span>•</span>
-              <a className="hover:text-white/70" href="https://reconica.dev">
-                reconica.dev
-              </a>
-            </div>
-          </Card>
-        </Section>
-
-        <footer className="border-t border-white/10 py-10">
-          <div className="max-w-6xl mx-auto px-5 text-xs text-white/55">
-            {t.footer}
           </div>
-        </footer>
-      </main>
+        </div>
+
+        <div className="mt-10 text-xs text-white/50">
+          {t.contact.footer}
+        </div>
+      </Section>
     </div>
   );
 }

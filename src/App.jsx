@@ -158,8 +158,7 @@ const copy = {
     },
     docs: {
       h: "Dokumenty",
-      p:
-        "Materiały referencyjne w formie PDF — wprost do cytowania i przeglądu.",
+    
       mind: "MIND_OS / HRP — whitepaper (EN)",
       dtr: "V.E.S.P.E.R. — DTR (PL)",
       videoH: "Wideo",

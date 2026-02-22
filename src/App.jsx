@@ -1,17 +1,19 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
-import hrpLogo from "./assets/HRP_logo_white.png";
+import hrpLogoWhite from "./assets/HRP_logo_white.png";
 import hrpLogoGold from "./assets/HRP_logo_gold.png";
-
-const YT_URL = "https://www.youtube.com/watch?v=yqasKddWLLg";
-
-const DOCS = {
-  mindOs: "/docs/MIND_OS_whitepaper_v3.1_EN.pdf",
-  vesperDtr: "/docs/VESPER_DTR_v1.2_PL.pdf",
-};
+import hrpLogoBack from "./assets/HRP_LOGO_back.png";
 
 const STORAGE_KEY = "reconica_lang";
+
+const YT_URL = "https://www.youtube.com/watch?v=yqasKddWLLg";
+const LINKEDIN_URL = "https://www.linkedin.com/in/tony-czyz-575371ba/";
+
+const DOCS = {
+  mindOs: "/docs/MIND_OS_referat_rozbudowany_FULL_v31 EN.pdf",
+  vesperDtr: "/docs/VESPER_DTR_Dokumentacja_v1.2_NAUKOWA_20p_PLUS.pdf",
+};
 
 const copy = {
   pl: {
@@ -28,13 +30,12 @@ const copy = {
     },
     hero: {
       kTag: "MIND_OS • V.E.S.P.E.R. • HRP",
-      h1a: "Homeostatic",
-      h1b: "Regulation Protocol",
+      h1: "Homeostatic Regulation Protocol",
       lead:
-        "HRP to warstwa regulacji wewnętrznej agenta — zarządza stanem, popędami (drives) i kosztem poznawczym. To nie jest kolejny protokół komunikacji. To „układ autonomiczny” dla długotrwałych instancji.",
+        "HRP to warstwa regulacji wewnętrznej instancji — zarządza stanem (PAD), popędami (drives) i kosztem poznawczym. To nie jest protokół komunikacji. To mechanizm stabilizacji i autonomii dla długotrwałych „bytów”.",
       ctaPrimary: "Czytaj whitepaper",
       ctaSecondary: "Zobacz architekturę",
-      badges: [
+      pills: [
         "homeostaza i stabilność",
         "metabolizm poznawczy",
         "warstwowa decyzyjność",
@@ -45,26 +46,40 @@ const copy = {
         title: "Projekt badawczy (w trakcie rozwoju)",
         bullets: [
           "Docelowo wszystkie funkcje opisane w dokumentach mają zostać spełnione (pełna architektura HRP / MIND_OS).",
-          "Obecnie system rozwijany jest w trybie iteracyjnym — najpierw rdzeń regulacji, potem dopinanie infrastruktury.",
-          "Gdy wersja bazowa będzie gotowa, zostanie udostępniona publicznie w formie repozytorium na GitHubie.",
+          "Obecnie rozwój jest iteracyjny: najpierw rdzeń regulacji, potem dopinanie infrastruktury i narzędzi.",
+          "Gdy wersja bazowa będzie gotowa, udostępnimy ją publicznie jako repozytorium na GitHubie.",
         ],
       },
-      program: {
+      current: {
         kicker: "AKTUALNE BADANIA",
         nowTitle: "Wpływ bodźców newsowych na „byty”",
         nowText:
-          "Trwają badania nad wpływem strumienia newsów z kraju i ze świata na stabilność instancji (m.in. zmiany PAD/drives, drift narracji, decyzje i koszt poznawczy).",
+          "Trwają badania nad wpływem newsów z kraju i ze świata na stabilność instancji: zmiany PAD/drives, dryf narracji, decyzje i koszt poznawczy.",
         nextTitle: "Kolejne fazy (infrastruktura później)",
         nextText:
-          "W kolejnych etapach będziemy dopiero podłączać dodatkową infrastrukturę i narzędzia, aby rozszerzać badania terenowe — po ustabilizowaniu rdzenia HRP.",
+          "Dopiero po ustabilizowaniu rdzenia HRP będziemy podłączać kolejną infrastrukturę, kanały bodźców i narzędzia, aby rozszerzyć badania terenowe.",
+      },
+      definition: {
+        kicker: "DEFINICJA",
+        title: "HRP w jednym zdaniu",
+        text:
+          "Stabilizuje zachowanie długotrwałej instancji przez regulację stanu (PAD), popędów (drives) i wyboru trybu decyzyjnego — przy kontrolowanym koszcie.",
+        chips: [
+          "PAD: baseline + wygaszanie",
+          "drives: arbitraż",
+          "meta‑kontrola",
+          "epizody → narracja",
+        ],
+        foot:
+          "Uwaga: HRP nie zastępuje protokołów komunikacji ani narzędzi — porządkuje ich użycie przez kontrolę wnętrza instancji.",
       },
     },
     abstract: {
       h: "Abstrakt",
       p1:
-        "W praktycznych systemach agentowych problemem nie jest brak narzędzi, tylko brak wewnętrznej stabilizacji: dryf narracji, nadmierne użycie narzędzi, lock-in motywacyjny i wahania trybu pracy.",
+        "W praktycznych systemach agentowych problemem nie jest brak narzędzi, tylko brak wewnętrznej stabilizacji: dryf narracji, nadmierne użycie narzędzi, lock‑in motywacyjny i wahania trybu pracy.",
       p2:
-        "HRP opisuje mechanikę homeostazy poznawczej: bodźce → appraisal → aktualizacja stanu (PAD) i popędów → router decyzji (heurystyka / refleksja / meta-kontrola) → pamięć epizodyczna → konsolidacja narracyjna. Celem jest spójność działania w czasie, przy kontrolowanym koszcie.",
+        "HRP opisuje mechanikę homeostazy poznawczej: bodźce → appraisal → aktualizacja stanu (PAD) i popędów → router decyzji (heurystyka / refleksja / meta‑kontrola) → pamięć epizodyczna → konsolidacja narracyjna. Celem jest spójność działania w czasie, przy kontrolowanym koszcie.",
     },
     contributions: {
       h: "Najważniejsze wkłady",
@@ -79,102 +94,74 @@ const copy = {
         },
         {
           t: "Metabolizm poznawczy",
-          d: "Budżet poznawczy i koszt akcji: agent nie odpala „ciała” (narzędzi) bez potrzeby.",
+          d: "Budżet poznawczy i koszt akcji: instancja nie odpala „ciała” (narzędzi) bez potrzeby.",
         },
         {
-          t: "Pamięć i „sleep”",
+          t: "Pamięć i „sen”",
           d: "Episody → narracja → aktualizacja modelu JA: spójność długich sesji bez trenowania LLM.",
         },
       ],
     },
-    positioning: {
-      h: "Pozycjonowanie względem MCP / ACP / A2A",
-      p:
-        "MCP/ACP/A2A porządkują kontekst i komunikację. HRP reguluje wnętrze instancji: kiedy działać, jak reagować i jak wracać do stabilnego baseline.",
-      table: {
-        col1: "Obszar",
-        col2: "MCP / ACP / A2A",
-        col3: "HRP",
-        rows: [
-          ["Cel", "kontekst + współpraca", "stan wewnętrzny + drives"],
-          ["Ryzyko", "chaos narzędzi / integracji", "dryf, lock-in, przeciążenie poznawcze"],
-          ["Mechanika", "protokół komunikacji", "bio-inspirowana pętla sprzężenia"],
-          ["Korzyść", "interoperacyjność", "długotrwała stabilność i autonomia"],
-        ],
-      },
-    },
     architecture: {
-      h: "Architektura w skrócie",
+      h: "Architektura",
       sub1: "1) Tick loop (życie instancji)",
       sub2: "2) Gdzie HRP „siedzi” w stosie",
       tickDesc:
-        "Tick to minimalny cykl życia instancji: pobranie bodźców → appraisal (znaczenie) → aktualizacja PAD/drives → wybór trybu myślenia i akcji → zapis epizodu. Stabilność wynika z decay/inercji i powrotu do baseline.",
+        "Tick to minimalny cykl życia instancji: pobranie bodźców → appraisal (znaczenie) → aktualizacja PAD/drives → wybór trybu (heurystyki / refleksja / meta‑kontrola) → akcja → zapis epizodu. Stabilność wynika z decay/inercji i powrotu do baseline.",
       stackDesc:
-        "HRP działa wewnątrz instancji (obok LLM) i reguluje użycie narzędzi/usług. MCP/ACP/A2A dotyczą kontekstu i współpracy; HRP dotyczy tego, co dzieje się „w środku”: stan, priorytety, koszt i tryb decyzyjny.",
-      legendTitle: "Legenda pojęć",
+        "HRP działa wewnątrz instancji (obok LLM) i reguluje użycie narzędzi/usług. MCP/ACP/A2A porządkują kontekst i współpracę, a HRP dotyczy tego, co dzieje się „w środku”: stan, priorytety, koszt i tryb decyzyjny.",
+      legendTitle: "Legenda",
       legend: [
         ["Bodźce", "wejścia z otoczenia (np. newsy, zdarzenia, użytkownik)."],
-        ["Appraisal", "ocena znaczenia bodźca dla celów/drives (nie „emocje”)."],
-        ["PAD", "stan (pleasure–arousal–dominance) + baseline/decay/inercja."],
-        ["Drives", "zmienne motywacyjne, konflikt i arbitraż priorytetów."],
-        ["Router decyzji", "przełącznik trybu: heurystyki / refleksja / meta-kontrola / safety."],
-        ["Sleep", "konsolidacja: epizody → narracja → aktualizacja modelu JA."],
+        ["Appraisal", "ocena znaczenia bodźca względem drives/celów (nie „emocje”)."],
+        ["PAD", "stan (pleasure–arousal–dominance) z baseline/decay/inercją."],
+        ["Drives", "zmienne motywacyjne + arbitraż priorytetów."],
+        ["Router decyzji", "przełącza tryb: heurystyki / refleksja / meta‑kontrola / safety."],
+        ["Sen", "konsolidacja: epizody → narracja → aktualizacja modelu JA."],
       ],
       note:
         "Diagramy są uproszczone — pokazują przepływ kontroli i decyzji, nie detale implementacyjne.",
     },
     notes: {
-      h: "Notatki badawcze (ciekawostki)",
+      h: "Notatki badawcze",
       items: [
         {
-          t: "Appraisal to funkcja znaczenia, nie „emocji”",
-          d: "Ten sam bodziec może wywołać inną reakcję w zależności od aktywnych drive’ów i historii epizodów.",
+          t: "Appraisal to funkcja znaczenia, nie „emocje”",
+          d: "Ten sam bodziec może dać inną reakcję w zależności od aktywnych drive’ów i historii epizodów.",
         },
         {
-          t: "Meta-kontrola przełącza tryb myślenia",
-          d: "Heurystyki w prostych sytuacjach, refleksja przy niepewności, safety-gate przy ryzyku.",
+          t: "Meta‑kontrola przełącza tryb myślenia",
+          d: "Heurystyki w prostych sytuacjach, refleksja przy niepewności, safety‑gate przy ryzyku.",
         },
         {
-          t: "Lock-in motywacyjny da się mierzyć",
+          t: "Lock‑in motywacyjny da się mierzyć",
           d: "Jeśli jeden drive dominuje zbyt długo, spada adaptacja i rośnie koszt — HRP to wygasza.",
         },
         {
           t: "Provenance ≠ storytelling",
-          d: "Episody zapisują „ślad” stanu i źródeł; narracja to konsolidacja, nie konfabulacja.",
+          d: "Episody zapisują ślad stanu i źródeł; narracja to konsolidacja, nie konfabulacja.",
         },
       ],
     },
     experiments: {
-      h: "Ewaluacja (propozycje metryk)",
+      h: "Ewaluacja",
       p:
-        "Poniżej zestaw metryk, które dobrze oddają, czy HRP realnie stabilizuje agenta. To „laboratory-friendly” checklist na iteracje.",
+        "Metryki, które najlepiej pokazują, czy HRP realnie stabilizuje instancję w długim czasie:",
       items: [
-        {
-          t: "Stability / drift",
-          d: "spójność odpowiedzi, powrót do baseline, odporność na szum bodźców",
-        },
-        {
-          t: "Tool-economy",
-          d: "liczba wywołań narzędzi, czas w trybie „ciało”, koszt na zadanie",
-        },
-        {
-          t: "Safety gating",
-          d: "odsetek blokad, fałszywe pozytywy/negatywy, czas reakcji",
-        },
-        {
-          t: "Narrative coherence",
-          d: "zgodność autobiografii, stabilność preferencji, kontrola halucynacji",
-        },
+        { t: "Stability / drift", d: "spójność, powrót do baseline, odporność na szum bodźców" },
+        { t: "Tool‑economy", d: "liczba wywołań narzędzi, czas w trybie „ciało”, koszt na zadanie" },
+        { t: "Safety gating", d: "blokady, fałszywe trafienia, czas reakcji" },
+        { t: "Narrative coherence", d: "spójność autobiografii, stabilność preferencji, kontrola halucynacji" },
       ],
     },
     refs: {
-      h: "Implementacje referencyjne (nie reklama produktu)",
+      h: "Implementacje referencyjne",
       p:
-        "Poniższe systemy traktujemy jako poligon wdrożeniowy do testów HRP — pokazują różne profile obciążenia i ryzyka.",
+        "Poniższe systemy traktujemy jako poligon wdrożeniowy do testów HRP — różne profile obciążenia i ryzyka:",
       cards: [
         {
           t: "V.E.S.P.E.R.",
-          d: "Środowisko narzędziowe (tooling-heavy): HRP steruje kosztem akcji i decyzją „czy odpalać ciało”.",
+          d: "Środowisko narzędziowe (tooling‑heavy): HRP steruje kosztem akcji i decyzją „czy odpalać ciało”.",
         },
         {
           t: "R.O.I.",
@@ -188,29 +175,26 @@ const copy = {
     },
     docs: {
       h: "Dokumenty",
-      p:
-        "Materiały referencyjne w formie PDF — wprost do cytowania i przeglądu.",
+      p: "Materiały referencyjne (PDF) + wideo (bez osadzania YouTube):",
       mind: "MIND_OS / HRP — whitepaper (EN)",
       dtr: "V.E.S.P.E.R. — DTR (PL)",
       videoH: "Wideo",
       videoP:
-        "Film jako materiał koncepcyjny. Dla prywatności: bez osadzania YouTube, tylko link.",
+        "Materiał koncepcyjny. Dla prywatności: link, bez osadzania odtwarzacza.",
       videoBtn: "Otwórz na YouTube",
       reg: "Regulamin",
     },
     contact: {
       h: "Kontakt",
-      p:
-        "Dwa kanały kontaktu, zależnie od tematu.",
+      p: "Wybierz kanał w zależności od tematu:",
       bizH: "Biznes / współpraca",
       bizD: "Partnerstwa, współpraca, inicjatywy komercyjne.",
       bizMail: "p.oleksiak@osintownia.pl",
-      techH: "Techniczno-badawcze",
+      techH: "Techniczno‑badawcze",
       techD: "HRP, MIND_OS, architektura, eksperymenty i dokumentacja.",
       techMail: "antoni.czyz@outlook.com",
-      li: "Profil na LinkedIn",
-      footer:
-        "© " + new Date().getFullYear() + " Reconica • HRP / MIND_OS",
+      li: "LinkedIn",
+      footer: `© ${new Date().getFullYear()} Reconica • HRP / MIND_OS`,
     },
   },
 
@@ -228,13 +212,12 @@ const copy = {
     },
     hero: {
       kTag: "MIND_OS • V.E.S.P.E.R. • HRP",
-      h1a: "Homeostatic",
-      h1b: "Regulation Protocol",
+      h1: "Homeostatic Regulation Protocol",
       lead:
-        "HRP is an internal regulation layer for agents — it manages state, drives, and cognitive cost. It is not a communication protocol. Think of it as an “autonomic system” for long-running entities.",
+        "HRP is an internal regulation layer for long‑running entities — it manages state (PAD), drives, and cognitive cost. It is not a communication protocol. It’s a stabilization and autonomy mechanism for persistent ‘beings’.",
       ctaPrimary: "Read the whitepaper",
       ctaSecondary: "See the architecture",
-      badges: [
+      pills: [
         "homeostasis & stability",
         "cognitive metabolism",
         "layered decision making",
@@ -244,27 +227,41 @@ const copy = {
         kicker: "RESEARCH STATUS",
         title: "Research project (in active development)",
         bullets: [
-          "The long-term goal is to implement the full HRP / MIND_OS feature set described in the documents.",
-          "Development is iterative: first the core regulation loop, then infrastructure and field integrations.",
-          "Once the baseline version is ready, it will be released publicly as a GitHub repository.",
+          "The goal is to implement the full HRP / MIND_OS feature set described in the documents.",
+          "Development is iterative: stabilize the regulation core first, then connect infrastructure and tools.",
+          "Once the baseline is ready, we will publish it as a GitHub repository.",
         ],
       },
-      program: {
+      current: {
         kicker: "CURRENT STUDY",
-        nowTitle: "News stimuli impact on long-running entities",
+        nowTitle: "News stimuli impact on long‑running entities",
         nowText:
-          "We are studying how national and global news streams affect entity stability (e.g., PAD/drives changes, narrative drift, decisions, and cognitive cost).",
+          "We study how national and global news streams affect entity stability: PAD/drives changes, narrative drift, decisions, and cognitive cost.",
         nextTitle: "Next phases (infrastructure later)",
         nextText:
-          "In later stages we will connect additional infrastructure and tools to expand field studies — after the HRP core stabilizes.",
+          "Only after the HRP core is stable we will connect more infrastructure, stimulus channels, and tools to expand field studies.",
+      },
+      definition: {
+        kicker: "DEFINITION",
+        title: "HRP in one sentence",
+        text:
+          "It stabilizes a long‑running entity by regulating state (PAD), drives, and decision‑mode selection — at a controlled cost.",
+        chips: [
+          "PAD baseline + decay",
+          "drives arbitration",
+          "meta‑control",
+          "episodes → narrative",
+        ],
+        foot:
+          "Note: HRP does not replace communication protocols or tools — it disciplines their use by controlling the inside of an instance.",
       },
     },
     abstract: {
       h: "Abstract",
       p1:
-        "In real agent systems, the core problem is not missing tools — it’s missing internal stabilization: narrative drift, tool overuse, motivational lock-in, and oscillating control modes.",
+        "In real agent systems, the core problem is not missing tools — it’s missing internal stabilization: narrative drift, tool overuse, motivational lock‑in, and oscillating control modes.",
       p2:
-        "HRP describes cognitive homeostasis mechanics: stimuli → appraisal → state (PAD) and drives update → decision router (heuristics / reflection / meta-control) → episodic memory → narrative consolidation. The goal is long-term coherence at a controlled cost.",
+        "HRP describes cognitive homeostasis mechanics: stimuli → appraisal → state (PAD) and drives update → decision router (heuristics / reflection / meta‑control) → episodic memory → narrative consolidation. The goal is long‑term coherence at a controlled cost.",
     },
     contributions: {
       h: "Key contributions",
@@ -275,67 +272,51 @@ const copy = {
         },
         {
           t: "Drives & arbitration",
-          d: "Dynamic motivational drives and conflict resolution — not static “goals in prompts”.",
+          d: "Dynamic motivational drives and conflict resolution — not static ‘goals in prompts’.",
         },
         {
           t: "Cognitive metabolism",
-          d: "Cognitive budget and action cost: the agent should not invoke the “body” (tools) unnecessarily.",
+          d: "Cognitive budget and action cost: the entity should not invoke tools unnecessarily.",
         },
         {
-          t: "Memory & “sleep”",
-          d: "Episodes → narrative → self-model updates: long-session coherence without retraining the LLM.",
+          t: "Memory & ‘sleep’",
+          d: "Episodes → narrative → self‑model updates: long‑session coherence without retraining the LLM.",
         },
       ],
     },
-    positioning: {
-      h: "Positioning vs MCP / ACP / A2A",
-      p:
-        "MCP/ACP/A2A standardize context and inter-agent communication. HRP regulates the inside of an instance: when to act, how to react, and how to return to a stable baseline.",
-      table: {
-        col1: "Scope",
-        col2: "MCP / ACP / A2A",
-        col3: "HRP",
-        rows: [
-          ["Goal", "context + collaboration", "internal state + drives"],
-          ["Main failure modes", "tool/integration chaos", "drift, lock-in, cognitive overload"],
-          ["Mechanics", "communication protocol", "biomimetic feedback loop"],
-          ["Benefit", "interoperability", "long-run stability and autonomy"],
-        ],
-      },
-    },
     architecture: {
-      h: "Architecture at a glance",
+      h: "Architecture",
       sub1: "1) Tick loop (instance life cycle)",
       sub2: "2) Where HRP sits in the stack",
       tickDesc:
-        "A tick is the minimal life cycle: ingest stimuli → appraisal (meaning) → update PAD/drives → choose cognition/action mode → store an episode. Stability comes from decay/inertia and a return to baseline.",
+        "A tick is the minimal life cycle: ingest stimuli → appraisal (meaning) → update PAD/drives → choose mode (heuristics / reflection / meta‑control) → act → store an episode. Stability comes from decay/inertia and a return to baseline.",
       stackDesc:
-        "HRP runs inside the instance (alongside the LLM) and regulates tool/service usage. MCP/ACP/A2A are about context and collaboration; HRP is about what happens inside: state, priorities, cost, and decision mode.",
-      legendTitle: "Concept legend",
+        "HRP runs inside the instance (alongside the LLM) and regulates tool/service usage. MCP/ACP/A2A standardize context and collaboration; HRP controls what happens inside: state, priorities, cost, and decision mode.",
+      legendTitle: "Legend",
       legend: [
         ["Stimuli", "inputs from the environment (e.g., news, events, user)."],
-        ["Appraisal", "meaning evaluation relative to goals/drives (not “emotion”)."],
+        ["Appraisal", "meaning evaluation relative to drives/goals (not ‘emotion’)."],
         ["PAD", "state (pleasure–arousal–dominance) with baseline/decay/inertia."],
-        ["Drives", "motivational variables and priority arbitration."],
-        ["Decision router", "mode switch: heuristics / reflection / meta-control / safety."],
-        ["Sleep", "consolidation: episodes → narrative → self-model updates."],
+        ["Drives", "motivational variables + priority arbitration."],
+        ["Decision router", "switches mode: heuristics / reflection / meta‑control / safety."],
+        ["Sleep", "consolidation: episodes → narrative → self‑model updates."],
       ],
       note:
         "Diagrams are simplified — they show control flow and decision routing, not implementation details.",
     },
     notes: {
-      h: "Research notes (quick facts)",
+      h: "Research notes",
       items: [
         {
-          t: "Appraisal is not “emotion” — it’s a meaning function",
+          t: "Appraisal is a meaning function, not ‘emotion’",
           d: "The same stimulus can yield different reactions depending on active drives and episodic history.",
         },
         {
-          t: "Meta-control switches cognition modes",
-          d: "Heuristics for easy cases, reflection under uncertainty, safety-gate under risk.",
+          t: "Meta‑control switches cognition modes",
+          d: "Heuristics for easy cases, reflection under uncertainty, safety‑gate under risk.",
         },
         {
-          t: "Motivational lock-in is measurable",
+          t: "Motivational lock‑in is measurable",
           d: "If one drive dominates too long, adaptation drops and cost rises — HRP dampens it.",
         },
         {
@@ -345,74 +326,60 @@ const copy = {
       ],
     },
     experiments: {
-      h: "Evaluation (metric proposals)",
+      h: "Evaluation",
       p:
-        "A compact metric set that reveals whether HRP actually stabilizes an agent — a lab-friendly checklist for iteration.",
+        "A compact metric set that reveals whether HRP actually stabilizes an entity over time:",
       items: [
         { t: "Stability / drift", d: "coherence, baseline return, robustness to noisy inputs" },
-        { t: "Tool-economy", d: "tool calls, time in “body mode”, cost per task" },
+        { t: "Tool‑economy", d: "tool calls, time in ‘body mode’, cost per task" },
         { t: "Safety gating", d: "block rate, false positives/negatives, response time" },
         { t: "Narrative coherence", d: "autobiography consistency, preference stability, hallucination control" },
       ],
     },
     refs: {
-      h: "Reference implementations (not product marketing)",
+      h: "Reference implementations",
       p:
-        "These systems act as deployment sandboxes for HRP — each represents a different risk and workload profile.",
+        "We use these systems as deployment sandboxes for HRP — different workload and risk profiles:",
       cards: [
-        { t: "V.E.S.P.E.R.", d: "Tooling-heavy environment: HRP controls action cost and “should we invoke the body?”." },
-        { t: "R.O.I.", d: "Operational environment: prioritization, telemetry, access control under information noise." },
-        { t: "SARA", d: "Long interaction assistant: narrative coherence, memory, long-run behavioral stability." },
+        { t: "V.E.S.P.E.R.", d: "Tooling‑heavy: HRP controls action cost and whether to invoke tools." },
+        { t: "R.O.I.", d: "Operational: prioritization, telemetry, access control under information noise." },
+        { t: "SARA", d: "Long interaction: narrative coherence, memory, long‑run behavioral stability." },
       ],
     },
     docs: {
       h: "Documents",
-      p: "PDF references — ready to read, cite, and discuss.",
+      p: "PDF references + video (no YouTube embed):",
       mind: "MIND_OS / HRP — whitepaper (EN)",
       dtr: "V.E.S.P.E.R. — DTR (PL)",
       videoH: "Video",
-      videoP: "A conceptual talk. For privacy: no YouTube embed — link only.",
+      videoP: "A conceptual talk. Privacy‑first: link only.",
       videoBtn: "Open on YouTube",
       reg: "Terms",
     },
     contact: {
       h: "Contact",
-      p: "Two channels, depending on the topic.",
+      p: "Choose a channel depending on the topic:",
       bizH: "Business / collaboration",
       bizD: "Partnerships, collaboration, commercial initiatives.",
       bizMail: "p.oleksiak@osintownia.pl",
       techH: "Technical / research",
       techD: "HRP, MIND_OS, architecture, experiments, documentation.",
       techMail: "antoni.czyz@outlook.com",
-      li: "LinkedIn profile",
-      footer:
-        "© " + new Date().getFullYear() + " Reconica • HRP / MIND_OS",
+      li: "LinkedIn",
+      footer: `© ${new Date().getFullYear()} Reconica • HRP / MIND_OS`,
     },
   },
 };
 
-function Section({ id, title, children, kicker }) {
+function clsx(...xs) {
+  return xs.filter(Boolean).join(" ");
+}
+
+function Pill({ children }) {
   return (
-    <section id={id} className="scroll-mt-28">
-      <div className="mx-auto max-w-6xl px-6 py-14">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.25 }}
-          transition={{ duration: 0.5 }}
-        >
-          {kicker && (
-            <div className="mb-3 text-xs tracking-[0.2em] text-white/50">
-              {kicker}
-            </div>
-          )}
-          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white">
-            {title}
-          </h2>
-          <div className="mt-6">{children}</div>
-        </motion.div>
-      </div>
-    </section>
+    <span className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-white/70">
+      {children}
+    </span>
   );
 }
 
@@ -425,70 +392,97 @@ function SoftCard({ title, desc, icon }) {
         </div>
         <div>
           <div className="text-base font-semibold text-white">{title}</div>
-          <div className="mt-2 text-sm leading-relaxed text-white/70">
-            {desc}
-          </div>
+          <div className="mt-2 text-sm leading-relaxed text-white/70">{desc}</div>
         </div>
       </div>
     </div>
   );
 }
 
-function Pill({ children }) {
+function Section({ id, title, kicker, children }) {
   return (
-    <span className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-white/70">
-      {children}
-    </span>
+    <section id={id} className="scroll-mt-28">
+      <div className="mx-auto max-w-7xl px-6 py-16">
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.25 }}
+          transition={{ duration: 0.5 }}
+        >
+          {kicker && (
+            <div className="mb-3 text-xs tracking-[0.2em] text-white/50">{kicker}</div>
+          )}
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white">
+            {title}
+          </h2>
+          <div className="mt-7">{children}</div>
+        </motion.div>
+      </div>
+    </section>
   );
 }
 
-function DiagramTick({ lang }) {
+function FigureCard({ title, children, footer }) {
+  return (
+    <div className="rounded-3xl border border-white/10 bg-black/35 p-6 overflow-hidden relative">
+      <div className="text-sm font-semibold text-white mb-3">{title}</div>
+      {children}
+      {footer && <div className="mt-4 text-sm text-white/70 leading-relaxed">{footer}</div>}
+    </div>
+  );
+}
+
+function TickFigure({ lang }) {
   const L =
     lang === "pl"
       ? {
           title: "PĘTLA TICK",
-          boxes: ["BODŹCE", "APPRAISAL", "STAN + DRIVES", "ROUTER DECYZJI", "AKCJA"],
+          boxes: ["BODŹCE", "APPRAISAL", "STAN + DRIVES", "ROUTER", "AKCJA"],
           loop: "SPRZĘŻENIE / PAMIĘĆ",
         }
       : {
           title: "TICK LOOP",
-          boxes: ["STIMULI", "APPRAISAL", "STATE + DRIVES", "DECISION ROUTER", "ACTION"],
+          boxes: ["STIMULI", "APPRAISAL", "STATE + DRIVES", "ROUTER", "ACTION"],
           loop: "FEEDBACK / MEMORY",
         };
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-black/40 p-5 overflow-hidden">
-      <div className="text-xs tracking-[0.2em] text-white/50 mb-3">{L.title}</div>
-      <svg viewBox="0 0 920 220" className="w-full h-auto">
+    <div className="rounded-2xl border border-white/10 bg-black/45 p-5">
+      <div className="text-xs tracking-[0.25em] text-white/50 mb-3">{L.title}</div>
+      <svg viewBox="0 0 980 250" className="w-full h-auto">
         <defs>
-          <linearGradient id="g1" x1="0" x2="1">
-            <stop offset="0" stopColor="rgba(255,255,255,0.18)" />
+          <linearGradient id="card" x1="0" x2="1">
+            <stop offset="0" stopColor="rgba(255,255,255,0.16)" />
             <stop offset="1" stopColor="rgba(255,255,255,0.04)" />
           </linearGradient>
+          <linearGradient id="flow" x1="0" x2="1">
+            <stop offset="0" stopColor="rgba(255,255,255,0.05)" />
+            <stop offset="0.5" stopColor="rgba(255,255,255,0.70)" />
+            <stop offset="1" stopColor="rgba(255,255,255,0.05)" />
+          </linearGradient>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="2" result="b" />
+            <feMerge>
+              <feMergeNode in="b" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
         </defs>
 
         {[
-          { x: 30, y: 70, w: 140, h: 70, t: L.boxes[0] },
-          { x: 200, y: 70, w: 160, h: 70, t: L.boxes[1] },
-          { x: 390, y: 70, w: 170, h: 70, t: L.boxes[2] },
-          { x: 590, y: 70, w: 160, h: 70, t: L.boxes[3] },
-          { x: 780, y: 70, w: 110, h: 70, t: L.boxes[4] },
+          { x: 40, y: 92, w: 160, h: 70, t: L.boxes[0] },
+          { x: 230, y: 92, w: 170, h: 70, t: L.boxes[1] },
+          { x: 430, y: 92, w: 190, h: 70, t: L.boxes[2] },
+          { x: 650, y: 92, w: 150, h: 70, t: L.boxes[3] },
+          { x: 830, y: 92, w: 110, h: 70, t: L.boxes[4] },
         ].map((b, i) => (
           <g key={i}>
-            <rect
-              x={b.x}
-              y={b.y}
-              width={b.w}
-              height={b.h}
-              rx="16"
-              fill="url(#g1)"
-              stroke="rgba(255,255,255,0.14)"
-            />
+            <rect x={b.x} y={b.y} width={b.w} height={b.h} rx="18" fill="url(#card)" stroke="rgba(255,255,255,0.15)" />
             <text
               x={b.x + b.w / 2}
-              y={b.y + b.h / 2 + 6}
-              fill="rgba(255,255,255,0.9)"
-              fontSize="14"
+              y={b.y + b.h / 2 + 5}
+              fill="rgba(255,255,255,0.92)"
+              fontSize="13"
               textAnchor="middle"
               fontFamily="ui-sans-serif, system-ui"
               letterSpacing="2"
@@ -498,55 +492,37 @@ function DiagramTick({ lang }) {
           </g>
         ))}
 
-        {[170, 360, 560, 750].map((x, i) => (
-          <g key={i}>
-            <line
-              x1={x}
-              y1={105}
-              x2={x + 30}
-              y2={105}
-              stroke="rgba(255,255,255,0.28)"
-              strokeWidth="2"
-            />
-            <polygon
-              points={`${x + 30},105 ${x + 22},99 ${x + 22},111`}
-              fill="rgba(255,255,255,0.28)"
-            />
-          </g>
+        {/* animated flow segments */}
+        {[
+          { d: "M 200 127 L 230 127", delay: 0 },
+          { d: "M 400 127 L 430 127", delay: 0.1 },
+          { d: "M 620 127 L 650 127", delay: 0.2 },
+          { d: "M 800 127 L 830 127", delay: 0.3 },
+        ].map((s, idx) => (
+          <motion.path
+            key={idx}
+            d={s.d}
+            stroke="url(#flow)"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeDasharray="10 10"
+            animate={{ strokeDashoffset: [0, -40] }}
+            transition={{ duration: 1.6, repeat: Infinity, ease: "linear", delay: s.delay }}
+            filter="url(#glow)"
+          />
         ))}
 
-        <path
-          d="M 835 70 C 850 35, 880 35, 895 70"
+        {/* feedback loop */}
+        <motion.path
+          d="M 900 92 C 948 52, 964 82, 952 124 C 942 160, 926 202, 884 198 C 852 196, 842 176, 852 152"
           stroke="rgba(255,255,255,0.22)"
           strokeWidth="2"
           fill="none"
+          strokeDasharray="6 10"
+          animate={{ strokeDashoffset: [0, -60] }}
+          transition={{ duration: 3.2, repeat: Infinity, ease: "linear" }}
         />
-        <path
-          d="M 895 70 C 910 105, 910 140, 895 175"
-          stroke="rgba(255,255,255,0.22)"
-          strokeWidth="2"
-          fill="none"
-        />
-        <path
-          d="M 895 175 C 880 210, 850 210, 835 175"
-          stroke="rgba(255,255,255,0.22)"
-          strokeWidth="2"
-          fill="none"
-        />
-        <path
-          d="M 835 175 C 820 140, 820 105, 835 70"
-          stroke="rgba(255,255,255,0.22)"
-          strokeWidth="2"
-          fill="none"
-        />
-        <text
-          x="865"
-          y="205"
-          fill="rgba(255,255,255,0.45)"
-          fontSize="11"
-          textAnchor="middle"
-          fontFamily="ui-sans-serif, system-ui"
-        >
+        <text x="890" y="226" fill="rgba(255,255,255,0.45)" fontSize="11" textAnchor="middle" fontFamily="ui-sans-serif, system-ui">
           {L.loop}
         </text>
       </svg>
@@ -554,7 +530,7 @@ function DiagramTick({ lang }) {
   );
 }
 
-function DiagramStack({ lang }) {
+function StackFigure({ lang }) {
   const labels =
     lang === "pl"
       ? [
@@ -573,27 +549,55 @@ function DiagramStack({ lang }) {
         ];
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-black/40 p-5 overflow-hidden">
-      <div className="text-xs tracking-[0.2em] text-white/50 mb-3">STACK</div>
-      <div className="grid gap-3">
-        {[0, 1, 2, 3, 4].map((i) => (
+    <div className="rounded-2xl border border-white/10 bg-black/45 p-5 relative overflow-hidden">
+      <div className="text-xs tracking-[0.25em] text-white/50 mb-3">STACK</div>
+      <div className="grid gap-3 relative z-10">
+        {labels.map((label, i) => (
           <div
-            key={i}
-            className={
-              "rounded-xl border border-white/10 px-4 py-3 flex items-center justify-between " +
-              (i === 3 ? "bg-white/[0.06]" : "bg-white/[0.03]")
-            }
+            key={label}
+            className={clsx(
+              "rounded-xl border border-white/10 px-4 py-3 flex items-center justify-between",
+              i === 3 ? "bg-white/[0.06]" : "bg-white/[0.03]"
+            )}
           >
-            <div className="text-sm text-white/85 font-medium">{labels[i]}</div>
+            <div className="text-sm text-white/85 font-medium">{label}</div>
             {i === 3 && (
-              <span className="text-xs text-white/60">
+              <motion.span
+                className="text-xs text-white/60"
+                animate={{ opacity: [0.6, 0.95, 0.6] }}
+                transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
+              >
                 PAD • drives • router • memory • sleep
-              </span>
+              </motion.span>
             )}
           </div>
         ))}
       </div>
+
+      {/* soft pulse behind HRP row */}
+      <motion.div
+        className="pointer-events-none absolute left-0 right-0 z-0"
+        style={{ top: "152px" }}
+        animate={{ opacity: [0.0, 0.28, 0.0] }}
+        transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <div className="mx-4 h-10 rounded-xl bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.16),rgba(0,0,0,0.0)_65%)]" />
+      </motion.div>
     </div>
+  );
+}
+
+function Background() {
+  const { scrollY } = useScroll();
+  const y = useTransform(scrollY, [0, 900], [0, 140]);
+  const opacity = useTransform(scrollY, [0, 700], [0.85, 0.35]);
+
+  return (
+    <motion.div style={{ y, opacity }} className="pointer-events-none fixed inset-0">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.12),rgba(0,0,0,0.0)_55%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.06),rgba(0,0,0,0.0)_62%)]" />
+      <div className="absolute inset-0 opacity-[0.06] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:72px_72px]" />
+    </motion.div>
   );
 }
 
@@ -611,39 +615,28 @@ export default function App() {
     document.title = t.docTitle;
   }, [lang, t.docTitle]);
 
-  const { scrollY } = useScroll();
-  const bgY = useTransform(scrollY, [0, 800], [0, 120]);
-  const glow = useTransform(scrollY, [0, 600], [0.85, 0.35]);
-
-  const nav = t.nav;
-
   const navItems = useMemo(
     () => [
-      { id: "overview", label: nav.overview },
-      { id: "architecture", label: nav.architecture },
-      { id: "notes", label: nav.notes },
-      { id: "experiments", label: nav.experiments },
-      { id: "refs", label: nav.refs },
-      { id: "docs", label: nav.docs },
-      { id: "contact", label: nav.contact },
+      { id: "overview", label: t.nav.overview },
+      { id: "architecture", label: t.nav.architecture },
+      { id: "notes", label: t.nav.notes },
+      { id: "experiments", label: t.nav.experiments },
+      { id: "refs", label: t.nav.refs },
+      { id: "docs", label: t.nav.docs },
+      { id: "contact", label: t.nav.contact },
     ],
-    [nav]
+    [t]
   );
 
   return (
     <div className="min-h-screen bg-black text-white selection:bg-white/20 selection:text-white">
-      {/* background */}
-      <motion.div style={{ y: bgY, opacity: glow }} className="pointer-events-none fixed inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.10),rgba(0,0,0,0.0)_55%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.06),rgba(0,0,0,0.0)_60%)]" />
-        <div className="absolute inset-0 opacity-[0.06] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:72px_72px]" />
-      </motion.div>
+      <Background />
 
-      {/* nav */}
+      {/* NAV */}
       <header className="sticky top-0 z-50 border-b border-white/10 bg-black/60 backdrop-blur">
         <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between gap-4">
           <a href="#overview" className="flex items-center gap-3">
-            <img src={hrpLogo} alt="HRP" className="h-9 w-9 rounded-lg object-contain" />
+            <img src={hrpLogoWhite} alt="HRP" className="h-9 w-9 rounded-lg object-contain" />
             <div className="leading-tight">
               <div className="text-sm font-semibold tracking-wide">HRP</div>
               <div className="text-[11px] text-white/55">Homeostatic Regulation Protocol</div>
@@ -665,7 +658,7 @@ export default function App() {
               aria-label="Toggle language"
               title="Toggle language"
             >
-              {nav.lang}
+              {t.nav.lang}
             </button>
             <a
               href={DOCS.mindOs}
@@ -679,10 +672,21 @@ export default function App() {
         </div>
       </header>
 
-      {/* hero */}
+      {/* HERO */}
       <section id="overview" className="relative scroll-mt-28">
-        <div className="mx-auto max-w-7xl px-6 pt-14 pb-10">
+        <div className="mx-auto max-w-7xl px-6 pt-14 pb-10 relative">
+          {/* large watermark (fills right side on wide screens) */}
+          <motion.img
+            src={hrpLogoBack}
+            alt=""
+            aria-hidden="true"
+            className="pointer-events-none hidden xl:block absolute -right-24 top-6 w-[820px] opacity-[0.13]"
+            animate={{ opacity: [0.10, 0.16, 0.10] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          />
+
           <div className="grid lg:grid-cols-12 gap-10 items-start">
+            {/* left */}
             <motion.div
               className="lg:col-span-7"
               initial={{ opacity: 0, y: 18 }}
@@ -691,18 +695,16 @@ export default function App() {
             >
               <div className="text-xs tracking-[0.25em] text-white/55">{t.hero.kTag}</div>
 
-              {/* Title row with animated logo */}
               <div className="mt-4 flex items-start gap-5">
                 <motion.img
                   src={hrpLogoGold}
                   alt="HRP"
-                  className="h-20 w-20 sm:h-24 sm:w-24 object-contain"
-                  animate={{ opacity: [0.85, 1, 0.85], scale: [1, 1.02, 1] }}
-                  transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+                  className="h-20 w-20 sm:h-24 sm:w-24 object-contain shrink-0"
+                  animate={{ opacity: [0.75, 1, 0.75], scale: [1, 1.03, 1], rotate: [0, 0.4, 0] }}
+                  transition={{ duration: 3.4, repeat: Infinity, ease: "easeInOut" }}
                 />
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight">
-                  <span className="text-white">{t.hero.h1a}</span>{" "}
-                  <span className="text-white/70">{t.hero.h1b}</span>
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.03]">
+                  {t.hero.h1}
                 </h1>
               </div>
 
@@ -728,20 +730,16 @@ export default function App() {
               </div>
 
               <div className="mt-6 flex flex-wrap gap-2">
-                {t.hero.badges.map((b, i) => (
-                  <Pill key={i}>{b}</Pill>
+                {t.hero.pills.map((p) => (
+                  <Pill key={p}>{p}</Pill>
                 ))}
               </div>
 
-              {/* Research status + program blocks */}
-              <div className="mt-8 grid gap-4">
-                <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur">
-                  <div className="text-xs tracking-[0.25em] text-white/55">
-                    {t.hero.status.kicker}
-                  </div>
-                  <div className="mt-2 text-base font-semibold text-white">
-                    {t.hero.status.title}
-                  </div>
+              {/* cards row (tasteful, aligned) */}
+              <div className="mt-10 grid md:grid-cols-2 gap-4">
+                <div className="md:col-span-2 rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur">
+                  <div className="text-xs tracking-[0.25em] text-white/55">{t.hero.status.kicker}</div>
+                  <div className="mt-2 text-base font-semibold text-white">{t.hero.status.title}</div>
                   <ul className="mt-3 space-y-2 text-sm text-white/70 leading-relaxed list-disc pl-5">
                     {t.hero.status.bullets.map((x) => (
                       <li key={x}>{x}</li>
@@ -750,26 +748,55 @@ export default function App() {
                 </div>
 
                 <div className="rounded-2xl border border-white/10 bg-black/30 p-6">
-                  <div className="text-xs tracking-[0.25em] text-white/55">
-                    {t.hero.program.kicker}
-                  </div>
+                  <div className="text-xs tracking-[0.25em] text-white/55">{t.hero.current.kicker}</div>
                   <div className="mt-3">
-                    <div className="text-sm font-semibold text-white">{t.hero.program.nowTitle}</div>
-                    <p className="mt-2 text-sm text-white/70 leading-relaxed">
-                      {t.hero.program.nowText}
-                    </p>
+                    <div className="text-sm font-semibold text-white">{t.hero.current.nowTitle}</div>
+                    <p className="mt-2 text-sm text-white/70 leading-relaxed">{t.hero.current.nowText}</p>
                   </div>
                   <div className="mt-4 pt-4 border-t border-white/10">
-                    <div className="text-sm font-semibold text-white">{t.hero.program.nextTitle}</div>
-                    <p className="mt-2 text-sm text-white/70 leading-relaxed">
-                      {t.hero.program.nextText}
-                    </p>
+                    <div className="text-sm font-semibold text-white">{t.hero.current.nextTitle}</div>
+                    <p className="mt-2 text-sm text-white/70 leading-relaxed">{t.hero.current.nextText}</p>
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-white/10 bg-black/30 p-6">
+                  <div className="text-xs tracking-[0.25em] text-white/55">
+                    {lang === "pl" ? "SZYBKIE LINKI" : "QUICK LINKS"}
+                  </div>
+                  <div className="mt-4 grid gap-3">
+                    <a
+                      href={DOCS.mindOs}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="rounded-xl border border-white/12 bg-white/[0.03] px-4 py-3 text-sm font-semibold text-white/85 hover:bg-white/[0.06] transition"
+                    >
+                      {lang === "pl" ? "Whitepaper (PDF)" : "Whitepaper (PDF)"}
+                    </a>
+                    <a
+                      href="#architecture"
+                      className="rounded-xl border border-white/12 bg-white/[0.03] px-4 py-3 text-sm font-semibold text-white/85 hover:bg-white/[0.06] transition"
+                    >
+                      {lang === "pl" ? "Diagramy i legenda" : "Diagrams & legend"}
+                    </a>
+                    <a
+                      href={YT_URL}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="rounded-xl border border-white/12 bg-white/[0.03] px-4 py-3 text-sm font-semibold text-white/85 hover:bg-white/[0.06] transition"
+                    >
+                      {lang === "pl" ? "Wideo (YouTube)" : "Video (YouTube)"}
+                    </a>
+                  </div>
+                  <div className="mt-4 text-xs text-white/55 leading-relaxed">
+                    {lang === "pl"
+                      ? "YouTube nie jest osadzany na stronie (privacy‑first)."
+                      : "YouTube is not embedded (privacy‑first)."}
                   </div>
                 </div>
               </div>
             </motion.div>
 
-            {/* Right column: concise definition card (kept, more “paper-like”) */}
+            {/* right */}
             <motion.div
               className="lg:col-span-5"
               initial={{ opacity: 0, y: 18 }}
@@ -778,63 +805,41 @@ export default function App() {
             >
               <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur shadow-[0_0_0_1px_rgba(255,255,255,0.04)]">
                 <div className="flex items-center justify-between">
-                  <div className="text-xs tracking-[0.25em] text-white/55">
-                    {lang === "pl" ? "DEFINICJA" : "DEFINITION"}
-                  </div>
-                  <img
-                    src={hrpLogo}
-                    alt="HRP mark"
-                    className="h-8 w-8 object-contain opacity-90"
-                  />
+                  <div className="text-xs tracking-[0.25em] text-white/55">{t.hero.definition.kicker}</div>
+                  <img src={hrpLogoWhite} alt="HRP" className="h-8 w-8 object-contain opacity-90" />
                 </div>
 
-                <motion.div
-                  className="mt-6 rounded-2xl border border-white/10 bg-black/40 p-5"
-                  initial={{ opacity: 0.0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true, amount: 0.4 }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <div className="text-sm font-semibold text-white">
-                    {lang === "pl" ? "HRP w jednym zdaniu" : "HRP in one sentence"}
-                  </div>
-                  <p className="mt-2 text-sm leading-relaxed text-white/70">
-                    {lang === "pl"
-                      ? "Stabilizuje zachowanie długotrwałej instancji przez regulację stanu (PAD), popędów (drives) i wyboru trybu decyzyjnego — przy kontrolowanym koszcie."
-                      : "It stabilizes a long-running entity by regulating state (PAD), drives, and decision-mode selection — at a controlled cost."}
-                  </p>
+                <div className="mt-5 rounded-2xl border border-white/10 bg-black/40 p-5">
+                  <div className="text-sm font-semibold text-white">{t.hero.definition.title}</div>
+                  <p className="mt-2 text-sm leading-relaxed text-white/70">{t.hero.definition.text}</p>
 
                   <div className="mt-4 grid grid-cols-2 gap-3 text-xs text-white/65">
-                    {(lang === "pl"
-                      ? ["PAD: baseline + wygaszanie", "drives: arbitraż", "meta-kontrola", "epizody → narracja"]
-                      : ["PAD baseline + decay", "drives arbitration", "meta-control", "episodes → narrative"]
-                    ).map((x) => (
-                      <div
-                        key={x}
-                        className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2"
-                      >
+                    {t.hero.definition.chips.map((x) => (
+                      <div key={x} className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2">
                         {x}
                       </div>
                     ))}
                   </div>
-                </motion.div>
-
-                <div className="mt-6 text-xs text-white/55 leading-relaxed">
-                  {lang === "pl"
-                    ? "Uwaga: HRP nie zastępuje protokołów komunikacji ani narzędzi — porządkuje ich użycie przez kontrolę wnętrza instancji."
-                    : "Note: HRP does not replace communication protocols or tools — it disciplines their use by controlling the inside of an instance."}
                 </div>
+
+                {/* visually stronger, non-amateur diagram in hero */}
+                <div className="mt-6 rounded-2xl border border-white/10 bg-black/40 p-5">
+                  <div className="text-xs tracking-[0.25em] text-white/55">
+                    {lang === "pl" ? "PRZEPŁYW (WIZUALIZACJA)" : "FLOW (VISUAL)"}
+                  </div>
+                  <div className="mt-3">
+                    <TickFigure lang={lang} />
+                  </div>
+                </div>
+
+                <div className="mt-6 text-xs text-white/55 leading-relaxed">{t.hero.definition.foot}</div>
               </div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      <Section
-        id="abstract"
-        title={t.abstract.h}
-        kicker={lang === "pl" ? "PODSUMOWANIE" : "RESEARCH SUMMARY"}
-      >
+      <Section id="abstract" title={t.abstract.h} kicker={lang === "pl" ? "PODSUMOWANIE" : "SUMMARY"}>
         <div className="max-w-4xl text-white/75 leading-relaxed space-y-4">
           <p>{t.abstract.p1}</p>
           <p>{t.abstract.p2}</p>
@@ -842,67 +847,23 @@ export default function App() {
 
         <div className="mt-10 grid md:grid-cols-2 gap-4">
           {t.contributions.items.map((it, i) => (
-            <SoftCard
-              key={i}
-              title={it.t}
-              desc={it.d}
-              icon={
-                <span className="text-sm font-semibold">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-              }
-            />
+            <SoftCard key={it.t} title={it.t} desc={it.d} icon={<span className="text-sm font-semibold">{String(i + 1).padStart(2, "0")}</span>} />
           ))}
         </div>
       </Section>
 
-      <Section
-        id="positioning"
-        title={t.positioning.h}
-        kicker={lang === "pl" ? "POZYCJONOWANIE" : "STACK POSITIONING"}
-      >
-        <p className="max-w-4xl text-white/75 leading-relaxed">{t.positioning.p}</p>
-
-        <div className="mt-8 overflow-hidden rounded-2xl border border-white/10">
-          <div className="grid grid-cols-3 bg-white/[0.03] text-xs text-white/70">
-            <div className="px-4 py-3 border-r border-white/10">{t.positioning.table.col1}</div>
-            <div className="px-4 py-3 border-r border-white/10">{t.positioning.table.col2}</div>
-            <div className="px-4 py-3">{t.positioning.table.col3}</div>
-          </div>
-          {t.positioning.table.rows.map((r, i) => (
-            <div key={i} className="grid grid-cols-3 text-sm text-white/80 bg-black/30">
-              <div className="px-4 py-3 border-t border-r border-white/10">{r[0]}</div>
-              <div className="px-4 py-3 border-t border-r border-white/10 text-white/70">{r[1]}</div>
-              <div className="px-4 py-3 border-t border-white/10">{r[2]}</div>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      <Section
-        id="architecture"
-        title={t.architecture.h}
-        kicker={lang === "pl" ? "DIAGRAMY" : "DIAGRAMS"}
-      >
+      <Section id="architecture" title={t.architecture.h} kicker={lang === "pl" ? "DIAGRAMY" : "DIAGRAMS"}>
         <div className="grid lg:grid-cols-2 gap-5">
-          <div>
-            <div className="text-sm font-semibold text-white mb-3">{t.architecture.sub1}</div>
-            <DiagramTick lang={lang} />
-            <p className="mt-4 text-sm text-white/70 leading-relaxed">
-              {t.architecture.tickDesc}
-            </p>
-          </div>
+          <FigureCard title={t.architecture.sub1} footer={t.architecture.tickDesc}>
+            <TickFigure lang={lang} />
+          </FigureCard>
 
-          <div>
-            <div className="text-sm font-semibold text-white mb-3">{t.architecture.sub2}</div>
-            <DiagramStack lang={lang} />
-            <p className="mt-4 text-sm text-white/70 leading-relaxed">
-              {t.architecture.stackDesc}
-            </p>
-          </div>
+          <FigureCard title={t.architecture.sub2} footer={t.architecture.stackDesc}>
+            <StackFigure lang={lang} />
+          </FigureCard>
         </div>
 
-        <div className="mt-8 rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+        <div className="mt-8 rounded-3xl border border-white/10 bg-white/[0.03] p-6">
           <div className="text-sm font-semibold text-white">{t.architecture.legendTitle}</div>
           <div className="mt-4 grid md:grid-cols-2 gap-3">
             {t.architecture.legend.map(([k, v]) => (
@@ -912,49 +873,32 @@ export default function App() {
               </div>
             ))}
           </div>
+          <div className="mt-6 text-xs text-white/55">{t.architecture.note}</div>
         </div>
-
-        <div className="mt-6 text-xs text-white/55">{t.architecture.note}</div>
       </Section>
 
-      <Section id="notes" title={t.notes.h} kicker={lang === "pl" ? "NOTATKI" : "LAB NOTES"}>
+      <Section id="notes" title={t.notes.h} kicker={lang === "pl" ? "NOTATKI" : "NOTES"}>
         <div className="grid md:grid-cols-2 gap-4">
-          {t.notes.items.map((it, i) => (
-            <SoftCard key={i} title={it.t} desc={it.d} icon={<span className="text-sm">✦</span>} />
+          {t.notes.items.map((it) => (
+            <SoftCard key={it.t} title={it.t} desc={it.d} icon={<span className="text-sm">✦</span>} />
           ))}
         </div>
       </Section>
 
-      <Section
-        id="experiments"
-        title={t.experiments.h}
-        kicker={lang === "pl" ? "METRYKI" : "METRICS"}
-      >
+      <Section id="experiments" title={t.experiments.h} kicker={lang === "pl" ? "METRYKI" : "METRICS"}>
         <p className="max-w-4xl text-white/75 leading-relaxed">{t.experiments.p}</p>
         <div className="mt-8 grid md:grid-cols-2 gap-4">
-          {t.experiments.items.map((it, i) => (
-            <SoftCard
-              key={i}
-              title={it.t}
-              desc={it.d}
-              icon={<span className="text-sm font-semibold">M</span>}
-            />
+          {t.experiments.items.map((it) => (
+            <SoftCard key={it.t} title={it.t} desc={it.d} icon={<span className="text-sm font-semibold">M</span>} />
           ))}
         </div>
       </Section>
 
-      <Section
-        id="refs"
-        title={t.refs.h}
-        kicker={lang === "pl" ? "WDROŻENIA" : "FIELD DEPLOYMENTS"}
-      >
+      <Section id="refs" title={t.refs.h} kicker={lang === "pl" ? "WDROŻENIA" : "DEPLOYMENTS"}>
         <p className="max-w-4xl text-white/75 leading-relaxed">{t.refs.p}</p>
         <div className="mt-8 grid md:grid-cols-3 gap-4">
-          {t.refs.cards.map((c, i) => (
-            <div
-              key={i}
-              className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur shadow-[0_0_0_1px_rgba(255,255,255,0.04)]"
-            >
+          {t.refs.cards.map((c) => (
+            <div key={c.t} className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur shadow-[0_0_0_1px_rgba(255,255,255,0.04)]">
               <div className="text-base font-semibold text-white">{c.t}</div>
               <div className="mt-2 text-sm leading-relaxed text-white/70">{c.d}</div>
             </div>
@@ -966,28 +910,13 @@ export default function App() {
         <p className="max-w-4xl text-white/75 leading-relaxed">{t.docs.p}</p>
 
         <div className="mt-8 grid md:grid-cols-2 gap-4">
-          <a
-            href={DOCS.mindOs}
-            target="_blank"
-            rel="noreferrer"
-            className="group rounded-2xl border border-white/10 bg-white/[0.03] p-6 hover:bg-white/[0.06] transition"
-          >
+          <a href={DOCS.mindOs} target="_blank" rel="noreferrer" className="group rounded-2xl border border-white/10 bg-white/[0.03] p-6 hover:bg-white/[0.06] transition">
             <div className="text-sm font-semibold text-white">{t.docs.mind}</div>
-            <div className="mt-2 text-xs text-white/60">
-              PDF • {lang === "pl" ? "otwórz w nowej karcie" : "open in new tab"}
-            </div>
+            <div className="mt-2 text-xs text-white/60">PDF</div>
           </a>
-
-          <a
-            href={DOCS.vesperDtr}
-            target="_blank"
-            rel="noreferrer"
-            className="group rounded-2xl border border-white/10 bg-white/[0.03] p-6 hover:bg-white/[0.06] transition"
-          >
+          <a href={DOCS.vesperDtr} target="_blank" rel="noreferrer" className="group rounded-2xl border border-white/10 bg-white/[0.03] p-6 hover:bg-white/[0.06] transition">
             <div className="text-sm font-semibold text-white">{t.docs.dtr}</div>
-            <div className="mt-2 text-xs text-white/60">
-              PDF • {lang === "pl" ? "otwórz w nowej karcie" : "open in new tab"}
-            </div>
+            <div className="mt-2 text-xs text-white/60">PDF</div>
           </a>
         </div>
 
@@ -995,35 +924,24 @@ export default function App() {
           <div className="text-base font-semibold text-white">{t.docs.videoH}</div>
           <p className="mt-2 text-sm leading-relaxed text-white/70">{t.docs.videoP}</p>
           <div className="mt-4 flex flex-wrap gap-3">
-            <a
-              href={YT_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="rounded-xl bg-white text-black px-5 py-3 text-sm font-semibold hover:opacity-90 transition"
-            >
+            <a href={YT_URL} target="_blank" rel="noreferrer" className="rounded-xl bg-white text-black px-5 py-3 text-sm font-semibold hover:opacity-90 transition">
               {t.docs.videoBtn}
             </a>
-            <a
-              href="/regulamin.html"
-              className="rounded-xl border border-white/12 bg-white/[0.03] px-5 py-3 text-sm font-semibold text-white/85 hover:bg-white/[0.06] transition"
-            >
+            <a href="/regulamin.html" className="rounded-xl border border-white/12 bg-white/[0.03] px-5 py-3 text-sm font-semibold text-white/85 hover:bg-white/[0.06] transition">
               {t.docs.reg}
             </a>
           </div>
         </div>
       </Section>
 
-      <Section id="contact" title={t.contact.h} kicker={lang === "pl" ? "KONTAKT" : "REACH OUT"}>
+      <Section id="contact" title={t.contact.h} kicker={lang === "pl" ? "KONTAKT" : "CONTACT"}>
         <p className="max-w-4xl text-white/75 leading-relaxed">{t.contact.p}</p>
 
         <div className="mt-8 grid lg:grid-cols-2 gap-4">
           <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur">
             <div className="text-base font-semibold text-white">{t.contact.bizH}</div>
             <div className="mt-2 text-sm text-white/70">{t.contact.bizD}</div>
-            <a
-              href={`mailto:${t.contact.bizMail}`}
-              className="mt-4 inline-flex rounded-xl bg-white text-black px-4 py-2 text-sm font-semibold hover:opacity-90 transition"
-            >
+            <a href={`mailto:${t.contact.bizMail}`} className="mt-4 inline-flex rounded-xl bg-white text-black px-4 py-2 text-sm font-semibold hover:opacity-90 transition">
               {t.contact.bizMail}
             </a>
           </div>
@@ -1032,18 +950,10 @@ export default function App() {
             <div className="text-base font-semibold text-white">{t.contact.techH}</div>
             <div className="mt-2 text-sm text-white/70">{t.contact.techD}</div>
             <div className="mt-4 flex flex-wrap gap-3">
-              <a
-                href={`mailto:${t.contact.techMail}`}
-                className="inline-flex rounded-xl bg-white text-black px-4 py-2 text-sm font-semibold hover:opacity-90 transition"
-              >
+              <a href={`mailto:${t.contact.techMail}`} className="inline-flex rounded-xl bg-white text-black px-4 py-2 text-sm font-semibold hover:opacity-90 transition">
                 {t.contact.techMail}
               </a>
-              <a
-                href="https://www.linkedin.com/in/tony-czyz-575371ba/"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex rounded-xl border border-white/12 bg-white/[0.03] px-4 py-2 text-sm font-semibold text-white/85 hover:bg-white/[0.06] transition"
-              >
+              <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" className="inline-flex rounded-xl border border-white/12 bg-white/[0.03] px-4 py-2 text-sm font-semibold text-white/85 hover:bg-white/[0.06] transition">
                 {t.contact.li}
               </a>
             </div>

@@ -43,7 +43,7 @@ const copy = {
       ],
       status: {
         kicker: "STATUS BADAŃ",
-        title: "Projekt badawczy (w trakcie rozwoju)",
+        title: "Projekt badawczy",
         bullets: [
           "Docelowo wszystkie funkcje opisane w dokumentach mają zostać spełnione (pełna architektura HRP / MIND_OS).",
           "Obecnie rozwój jest iteracyjny: najpierw rdzeń regulacji, potem dopinanie infrastruktury i narzędzi.",
@@ -175,7 +175,7 @@ const copy = {
     },
     docs: {
       h: "Dokumenty",
-      p: "Materiały referencyjne (PDF) + wideo (bez osadzania YouTube):",
+
       mind: "MIND_OS / HRP — whitepaper (EN)",
       dtr: "V.E.S.P.E.R. — DTR (PL)",
       videoH: "Wideo",

@@ -138,7 +138,7 @@ const copy = {
       ],
     },
     refs: {
-      h: "Reference implementations (nie „reklama aplikacji”)",
+      h: "Reference implementations",
       p:
         "Poniższe systemy traktujemy jako poligon wdrożeniowy do testów HRP — pokazują różne profile obciążenia i ryzyka.",
       cards: [
@@ -151,7 +151,7 @@ const copy = {
           d: "Środowisko operacyjne: priorytetyzacja, telemetria i kontrola dostępu w warunkach szumu informacyjnego.",
         },
         {
-          t: "SARA",
+          t: "DOMINIKA",
           d: "Asystent długiej interakcji: spójność narracji, pamięć i stabilność zachowania w czasie.",
         },
       ],

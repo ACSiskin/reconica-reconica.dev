@@ -94,7 +94,7 @@ const copy = {
         "Diagramy są uproszczone — pokazują przepływ kontroli i decyzji, nie detale implementacyjne.",
     },
     notes: {
-      h: "Ciekawostki (dla ludzi technicznych)",
+      h: "Ciekawostki",
       items: [
         {
           t: "Appraisal to nie „emocje” — to funkcja znaczenia",
@@ -115,7 +115,7 @@ const copy = {
       ],
     },
     experiments: {
-      h: "Ewaluacja (propozycje metryk)",
+      h: "Ewaluacja",
       p:
         "Poniżej zestaw metryk, które dobrze oddają, czy HRP realnie stabilizuje agenta. To „laboratory‑friendly” checklist na iteracje.",
       items: [
@@ -163,8 +163,7 @@ const copy = {
       mind: "MIND_OS / HRP — whitepaper (EN)",
       dtr: "V.E.S.P.E.R. — DTR (PL)",
       videoH: "Wideo",
-      videoP:
-        "Film jako materiał koncepcyjny. Dla prywatności: bez osadzania YouTube, tylko link.",
+    
       videoBtn: "Otwórz na YouTube",
       reg: "Regulamin",
     },
@@ -294,7 +293,7 @@ const copy = {
       ],
     },
     refs: {
-      h: "Reference implementations (not product marketing)",
+      h: "Reference implementations",
       p:
         "These systems act as deployment sandboxes for HRP — each represents a different risk and workload profile.",
       cards: [

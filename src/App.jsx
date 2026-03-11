@@ -189,7 +189,7 @@ const copy = {
       p: "Wybierz kanał w zależności od tematu:",
       bizH: "Biznes / współpraca",
       bizD: "Partnerstwa, współpraca, inicjatywy komercyjne.",
-      bizMail: "p.oleksiak@osintownia.pl",
+      bizMail: "antoni.czyz@outlook.com",
       techH: "Techniczno‑badawcze",
       techD: "HRP, MIND_OS, architektura, eksperymenty i dokumentacja.",
       techMail: "antoni.czyz@outlook.com",
